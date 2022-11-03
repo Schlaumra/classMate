@@ -2,7 +2,6 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
-    "api": "apps/api",
     "api-interfaces": "libs/api-interfaces",
     "webuntis": "apps/webuntis",
     "webuntis-e2e": "apps/webuntis-e2e"
