@@ -134,3 +134,35 @@ export interface Lesson {
   teachers: string,
   text: string
 }
+
+export interface Mark {
+  id: number,
+  markDisplayValue: number,
+  markSchemaId: number,
+  markValue: number,
+  name: string
+}
+
+export interface Grade {
+  date: number,
+  examId: number,
+  examType: {
+    id: number,
+    longname: string,
+    markSchemaId: number,
+    name: string,
+    weightFactor: number
+  }
+  examTypeId: number,
+  id: number,
+  lastUpdate: number
+  mark: Mark
+  markSchemaId: number,
+  schoolyearId: number,
+  text: string
+}
+
+export interface GradeCollectionBySubject {
+  grades: Grade[];
+  lesson: Lesson;
+}

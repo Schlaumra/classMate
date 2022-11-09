@@ -1,4 +1,5 @@
 {
+  "name": "webuntis",
   "projectType": "application",
   "sourceRoot": "apps/webuntis/src",
   "prefix": "webuntis",
@@ -79,7 +80,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/webuntis"],
+      "outputs": ["{workspaceRoot}/coverage/apps/webuntis"],
       "options": {
         "jestConfig": "apps/webuntis/jest.config.ts",
         "passWithNoTests": true

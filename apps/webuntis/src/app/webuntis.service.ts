@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, tap, map, mergeMap, from} from "rxjs";
-import {dto, GetCurrentSchoolYearDtoResponse, GetDepartmentsDtoResponse, GetHolidaysDtoResponse, GetRoomsDtoResponse, GetStatusDataDtoResponse, GetSubjectsDtoResponse, GetTimegridUnitsDtoResponse, jsonRpc, Lesson, LoginDto, LoginDtoResponse, Method, PersonType} from "@webuntis/api-interfaces";
+import {dto, GetCurrentSchoolYearDtoResponse, GetDepartmentsDtoResponse, GetHolidaysDtoResponse, GetRoomsDtoResponse, GetStatusDataDtoResponse, GetSubjectsDtoResponse, GetTimegridUnitsDtoResponse, Grade, GradeCollectionBySubject, jsonRpc, Lesson, LoginDto, LoginDtoResponse, Method, PersonType} from "@webuntis/api-interfaces";
 import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
@@ -88,25 +88,19 @@ export class WebuntisService {
   getLessons(): Observable<Lesson> {
     return this.getApi<{ data: { lessons: Lesson[] }}>(`classreg/grade/grading/list?studentId=${this.subject.personId}&schoolyearId=12`)
     .pipe(
-      mergeMap(value => {
-        // from(value.data.lessons).subscribe(va => console.log(va))
-        return from(value.data.lessons)
-      })
+      mergeMap(value => from(value.data.lessons))
     )
   }
 
-  getGrades(): Observable<any> {
+  getGrades(): Observable<GradeCollectionBySubject> {
     return this.getLessons().pipe(
-      map(lesson => {
-        return this.getApi(`classreg/grade/grading/lesson?studentId=${this.subject.personId}&lessonId=${lesson.id}`)
+      mergeMap(lesson => {
+        return this.getApi<{data: GradeCollectionBySubject}>(`classreg/grade/grading/lesson?studentId=${this.subject.personId}&lessonId=${lesson.id}`)
+          .pipe(
+            map(data => data.data)
+          )
       })
     )
-    
-    // return this.getCurrentSchoolYear().pipe(
-    //   mergeMap(currentYear => {
-    //     return this.getApi(`classreg/grade/gradeList?studentId=${this.subject.personId}&startDate=${currentYear.result.startDate}&endDate=${currentYear.result.endDate}`)
-    //   })
-    // )
   }
 
 }

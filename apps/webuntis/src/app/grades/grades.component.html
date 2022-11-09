@@ -1,0 +1,21 @@
+<!-- <button mat-button (click)="logout()">Logout</button> -->
+
+<!-- <button mat-button (click)="test()">test</button> -->
+
+
+<div class="example-container mat-elevation-z8">
+  <mat-table #table [dataSource]="dataSource">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- Subject Column -->
+    <ng-container matColumnDef="subject">
+      <mat-header-cell *matHeaderCellDef> Subject </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.lesson.subjects}} </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</div>

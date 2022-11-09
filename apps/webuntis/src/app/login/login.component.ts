@@ -3,6 +3,8 @@ import {FormBuilder, Validators} from "@angular/forms";
 import {WebuntisService} from "../webuntis.service";
 import {PersonType} from "@webuntis/api-interfaces";
 import {map, Observable} from "rxjs";
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'webuntis-login',
@@ -20,7 +22,7 @@ export class LoginComponent implements OnInit {
 
   private subject: Observable<{ klasseId: number; personId: number; personType: PersonType; sessionId: string; }> | undefined
 
-  constructor(private webUntis: WebuntisService, private formBuilder: FormBuilder) {
+  constructor(private webUntis: WebuntisService, private formBuilder: FormBuilder, private router: Router) {
 
   }
   ngOnInit(): void {
@@ -37,18 +39,8 @@ export class LoginComponent implements OnInit {
 
       this.subject.subscribe(value => {
         console.log(value)
+        this.router.navigate(['grades'])
       })
-
-
-
-      // this.untisApi
-      //   .login()
-      //   .then(() => {
-      //     console.log(this.untisApi.getOwnTimetableForToday());
-      //   })
-      //   .then((timetable) => {
-      //     // profit
-      //   });
     }
     return false
   }
@@ -79,6 +71,6 @@ export class LoginComponent implements OnInit {
 
     // this.webUntis.getGrades().subscribe(value => console.log(value))
 
-    this.webUntis.getGrades().subscribe(value => console.log(value))
+    // this.webUntis.getGrades().subscribe(value => console.log(value))
   }
 }
