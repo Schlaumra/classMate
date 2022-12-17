@@ -15,6 +15,18 @@
       <mat-cell *matCellDef="let element"> {{element.lesson.subjects}} </mat-cell>
     </ng-container>
 
+    <!-- Grades Columns -->
+    <ng-container *ngFor="let n of gradeArray" matColumnDef="{{n}}">
+      <mat-header-cell class="matColumnGrades" *matHeaderCellDef>{{n}}</mat-header-cell>
+      <mat-cell class="matColumnGrades" *matCellDef="let element"> {{element.gradesWithMarks[n]?.mark.name }} </mat-cell>
+    </ng-container>
+
+    <!-- Average Columns -->
+    <ng-container matColumnDef="average">
+      <mat-header-cell class="matColumnGrades" *matHeaderCellDef> Average </mat-header-cell>
+      <mat-cell class="matColumnGrades" *matCellDef="let element"> {{ element.averageMark }} </mat-cell>
+    </ng-container>
+
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>

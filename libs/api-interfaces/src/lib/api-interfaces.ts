@@ -164,5 +164,24 @@ export interface Grade {
 
 export interface GradeCollectionBySubject {
   grades: Grade[];
+  gradesWithMarks: Grade[];
+  averageMark: number;
   lesson: Lesson;
+}
+
+export interface Person {
+  displayName: string,
+  id: number,
+  imageUrl: string
+}
+
+export interface DataSubject {
+  user: {
+    id: number,
+    locale: string,
+    name: string,
+    person: Person,
+    roles: string[],
+    students: Person[] // TODO: Switch between student
+  }
 }

@@ -23,17 +23,29 @@ export class GradeDataSource extends DataSource<GradeCollectionBySubject> {
 @Component({
   selector: 'webuntis-grades',
   templateUrl: './grades.component.html',
-  styleUrls: ['./grades.component.css'],
+  styleUrls: ['./grades.component.scss'],
 })
 export class GradesComponent implements OnInit {
   displayedColumns: string[] = ['subject'];
   dataSource = new GradeDataSource()
+  maxGradeLength = 0
+  gradeArray = Array.from({length: 10}, (e, i)=> i)
 
   constructor(private webUntis: WebuntisService) {}
 
   ngOnInit(): void {
-    console.log("Inir");
-    console.log(this.webUntis.subject)
-    this.webUntis.getGrades().pipe(toArray()).subscribe(value => this.dataSource.update(value))
+    this.webUntis.getGrades().pipe(toArray()).subscribe(value =>
+      {
+        value.forEach(subject => {
+          const len = subject.gradesWithMarks.length
+          
+          this.maxGradeLength = len > this.maxGradeLength ? len : this.maxGradeLength;
+        })
+        for (let i = 0; i < this.maxGradeLength; i++) {
+          this.displayedColumns.push(i.toString())
+        }
+        this.displayedColumns.push('average')
+        this.dataSource.update(value)
+      })
   }
 }
