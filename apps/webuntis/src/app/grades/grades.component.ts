@@ -17,7 +17,9 @@ export class GradeDataSource extends DataSource<GradeCollectionBySubject> {
     return this.data;
   }
 
-  disconnect() {}
+  disconnect() {
+    console.log("disconect from data")
+  }
 }
 
 @Component({

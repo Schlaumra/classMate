@@ -17,7 +17,7 @@
 
     <!-- Grades Columns -->
     <ng-container *ngFor="let n of gradeArray" matColumnDef="{{n}}">
-      <mat-header-cell class="matColumnGrades" *matHeaderCellDef>{{n}}</mat-header-cell>
+      <mat-header-cell class="matColumnGrades" *matHeaderCellDef></mat-header-cell>
       <mat-cell class="matColumnGrades" *matCellDef="let element"> {{element.gradesWithMarks[n]?.mark.name }} </mat-cell>
     </ng-container>
 

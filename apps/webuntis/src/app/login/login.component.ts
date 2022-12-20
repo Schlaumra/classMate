@@ -20,13 +20,15 @@ export class LoginComponent implements OnInit {
     password: ['', Validators.required],
   });
 
-  private subject: Observable<DataSubject> | undefined
+  private subject: Observable<[DataSubject, LoginDtoResponse]> | undefined
 
   constructor(private webUntis: WebuntisService, private formBuilder: FormBuilder, private router: Router) {
 
   }
   ngOnInit(): void {
-    console.log("Init")
+    console.log(this.subject)
+    console.log(this.webUntis.data)
+    console.log(this.webUntis.apiConnection)
   }
 
   login(): boolean {
@@ -41,34 +43,5 @@ export class LoginComponent implements OnInit {
       })
     }
     return false
-  }
-
-  logout() {
-    console.log("Logout")
-    this.webUntis.logout().subscribe()
-  }
-
-  test() {
-    console.log("testing")
-
-    // this.webUntis.getSubjects().subscribe(value => console.log(value))
-
-    // this.webUntis.getRooms().subscribe(value => console.log(value))
-
-    // this.webUntis.getDepartements().subscribe(value => console.log(value))
-
-    // this.webUntis.getHolidays().subscribe(value => console.log(value))
-
-    // this.webUntis.getTimeGridUnits().subscribe(value => console.log(value))
-
-    // this.webUntis.getStatusData().subscribe( value => console.log(value))
-
-    // this.webUntis.getCurrentSchoolYear().subscribe(value => console.log(value))
-
-    // this.webUntis.getSchoolYears().subscribe(value => console.log(value))
-
-    // this.webUntis.getGrades().subscribe(value => console.log(value))
-
-    // this.webUntis.getGrades().subscribe(value => console.log(value))
   }
 }

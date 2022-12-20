@@ -1,24 +1,53 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Observable, tap, map, mergeMap, from} from "rxjs";
-import {DataSubject, dto, GetCurrentSchoolYearDtoResponse, GetDepartmentsDtoResponse, GetHolidaysDtoResponse, GetRoomsDtoResponse, GetStatusDataDtoResponse, GetSubjectsDtoResponse, GetTimegridUnitsDtoResponse, Grade, GradeCollectionBySubject, jsonRpc, Lesson, LoginDto, LoginDtoResponse, Method, Person, PersonType} from "@webuntis/api-interfaces";
+import {Observable, tap, map, mergeMap, from, concatMap, switchMap, forkJoin} from "rxjs";
+import {DataSubject, dto, GetCurrentSchoolYearDtoResponse, Grade, GradeCollectionBySubject, jsonRpc, Lesson, LoginDtoResponse, Method, Person, PersonType} from "@webuntis/api-interfaces";
 import { CookieService } from 'ngx-cookie-service';
+
+interface ApiConnection {
+  connected: boolean,
+  token: string,
+  school: string
+  logout: () => void
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebuntisService {
-  oldBaseUrl = '/api/WebUntis/jsonrpc.do'
-  baseUrl = '/api/WebUntis/api/'
-  client = 'geekUntis'
-  token = ''
-  jsonRpcVersion = jsonRpc
 
-  school!: string
+  oldApiConnection = {
+    jsonRpcVersion: jsonRpc,
+    baseUrl: '/api/WebUntis/jsonrpc.do',
+    currentUrl: '',
+    logout: () => {
+      this.oldApiConnection.currentUrl = ''
+    }
+  }
+  apiDefinition = {
+    baseUrl: '/api/WebUntis/api/',
+    client: 'geekUntis',
+  }
+
+  apiConnection: ApiConnection = {
+    connected: false,
+    token: '',
+    school: '',
+    logout: () => {
+      this.apiConnection.connected = false
+      this.apiConnection.token = ''
+      this.apiConnection.school = ''
+    }
+  }
+
+
+
+
+  
+
   subject!: { klasseId: number; personId: number; personType: PersonType; sessionId: string; }
   student!: Person
   data!: DataSubject
-  sessionId!: string
 
 
   constructor(private http: HttpClient, private cookieService: CookieService) { }
@@ -28,71 +57,65 @@ export class WebuntisService {
       id: 1,
       method: method,
       params: params,
-      jsonrpc: this.jsonRpcVersion
+      jsonrpc: this.oldApiConnection.jsonRpcVersion
     }
-    return this.http.post<T>(this.oldBaseUrl, body);
+    return this.http.post<T>(this.oldApiConnection.currentUrl, body);
   }
 
   getApi<T>(path: string, headers?: HttpHeaders | {[header: string]: string | string[];} | undefined) {
-    return this.http.get<T>(this.baseUrl + path, { headers: headers })
+    if (this.apiConnection.connected) {
+      return this.http.get<T>(this.apiDefinition.baseUrl + path, { headers: headers })
+    }
+    else {
+      throw Error("Not connected - GeekUntis")
+    }
   }
 
-  login(school: string, username: string, password: string): Observable<DataSubject> {
-    this.oldBaseUrl = `${this.oldBaseUrl}?school=${school}`
-    this.school = school
+  login(school: string, username: string, password: string): Observable<[DataSubject, LoginDtoResponse]> {
+    this.oldApiConnection.currentUrl = `${this.oldApiConnection.baseUrl}?school=${school}`
+    this.apiConnection.school = school
 
-    return this.postOldApi<LoginDtoResponse>(Method.AUTH, { user: username, password: password, client: this.client}).pipe(
+    const session$ = this.postOldApi<LoginDtoResponse>(Method.AUTH, { user: username, password: password, client: this.apiDefinition.client}).pipe(
       tap(value => {
+        console.log("result", value)
         this.subject = value.result
         this.cookieService.set('JSESSIONID', this.subject.sessionId);
       }),
-      mergeMap(() => {
-        return this.http.get('/api/WebUntis/api/token/new', {responseType: "text" }).pipe(
-          tap(value2 => this.token = value2),
-          mergeMap(() => {
-            return this.getData().pipe(
-              tap(value3 => {
-                this.data = value3
-                if (this.data.user.roles.includes("STUDENT")) {
-                  this.student = this.data.user.person
-                }
-                else {
-                  this.student = this.data.user.students[0]
-                }
-              })
-            )
+    );
+
+    // TODO: Timeout ECONNRESET
+
+    const data$ = this.http.get('/api/WebUntis/api/token/new', {responseType: "text" }).pipe(
+      tap(value2 => {
+        this.apiConnection.token = value2
+        this.apiConnection.connected = true
+      }),
+      switchMap(() => {
+        return this.getData().pipe(
+          tap(value3 => {
+            this.data = value3
+            if (this.data.user.roles.includes("STUDENT")) {
+              this.student = this.data.user.person
+            }
+            else {
+              this.student = this.data.user.students[0]
+            }
           })
         )
       })
-    );
+    )
+
+    return forkJoin([data$, session$])
   }
 
   logout(): Observable<any> {
-    return this.postOldApi(Method.LOGOUT);
-  }
-
-  getSubjects(): Observable<GetSubjectsDtoResponse> {
-    return this.postOldApi<GetSubjectsDtoResponse>(Method.GETSUBJECTS);
-  }
-
-  getRooms(): Observable<GetRoomsDtoResponse> {
-    return this.postOldApi<GetRoomsDtoResponse>(Method.GETROOMS)
-  }
-
-  getDepartements(): Observable<GetDepartmentsDtoResponse> {
-    return this.postOldApi<GetDepartmentsDtoResponse>(Method.GETDEPARTMENTS)
-  }
-
-  getHolidays(): Observable<GetHolidaysDtoResponse> {
-    return this.postOldApi<GetHolidaysDtoResponse>(Method.GETHOLIDAYS)
-  }
-
-  getTimeGridUnits(): Observable<GetTimegridUnitsDtoResponse> {
-    return this.postOldApi<GetTimegridUnitsDtoResponse>(Method.GETTIMEGRIDUNITS)
-  }
-
-  getStatusData(): Observable<GetStatusDataDtoResponse> {
-    return this.postOldApi<GetStatusDataDtoResponse>(Method.GETSTATUSDATA)
+    // TODO: Try to logout else do rest
+    return this.postOldApi(Method.LOGOUT).pipe(
+      tap(() => {
+        this.apiConnection.logout()
+        this.oldApiConnection.logout()
+      })
+    );
   }
 
   getCurrentSchoolYear(): Observable<GetCurrentSchoolYearDtoResponse> {
@@ -112,7 +135,7 @@ export class WebuntisService {
 
   getData(): Observable<DataSubject> {
     const httpHeaders: HttpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${this.token}`
+      Authorization: `Bearer ${this.apiConnection.token}`
     });
     return this.getApi<DataSubject>('rest/view/v1/app/data', httpHeaders)
   }
@@ -126,7 +149,7 @@ export class WebuntisService {
               const res = data.data
               res.gradesWithMarks = res.grades.filter((value: Grade) => value.mark.markValue != 0);
               if (res.gradesWithMarks.length > 0) {
-                res.averageMark = res.gradesWithMarks.reduce((sum, current) => sum += current.mark.markValue, 0) / res.gradesWithMarks.length / 100
+                res.averageMark = Number((res.gradesWithMarks.reduce((sum, current) => sum += current.mark.markValue, 0) / res.gradesWithMarks.length / 100).toFixed(2))
               }
               else {
                 res.averageMark = 0
