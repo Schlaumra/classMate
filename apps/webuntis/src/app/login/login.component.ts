@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
 import {WebuntisService} from "../webuntis.service";
 import {DataSubject, LoginDtoResponse, PersonType} from "@webuntis/api-interfaces";
-import {map, Observable} from "rxjs";
+import {map, Observable, Subscription} from "rxjs";
 import { Router } from '@angular/router';
 
 
@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   baseUrl = 'localhost:4200/api';
   school = 'lbs-brixen';
 
@@ -20,7 +20,8 @@ export class LoginComponent implements OnInit {
     password: ['', Validators.required],
   });
 
-  private subject: Observable<[DataSubject, LoginDtoResponse]> | undefined
+  private subject: Observable<DataSubject> | undefined
+  private requests: Subscription[] = []
 
   constructor(private webUntis: WebuntisService, private formBuilder: FormBuilder, private router: Router) {
 
@@ -31,16 +32,20 @@ export class LoginComponent implements OnInit {
     console.log(this.webUntis.apiConnection)
   }
 
+  ngOnDestroy(): void {
+      this.requests.forEach(request => request.unsubscribe())
+  }
+
   login(): boolean {
     const { username, password } = this.loginForm.value;
     if (username && password)
     {
       this.subject = this.webUntis.login(this.school, username, password)
 
-      this.subject.subscribe(value => {
-        console.log(value)
+      this.requests.push(this.subject.subscribe(value => {
+        console.log("Login: ", value)
         this.router.navigate(['grades'])
-      })
+      }))
     }
     return false
   }

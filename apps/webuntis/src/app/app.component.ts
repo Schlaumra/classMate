@@ -14,6 +14,7 @@ export class AppComponent {
   logout() {
     console.log("Logout")
     this.webUntis.logout().subscribe()
+    console.log(this.webUntis.apiConnection)
     this.router.navigate(['login'])
   }
 }

@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { WebuntisService } from '../webuntis.service';
 import { Grade, GradeCollectionBySubject } from '@webuntis/api-interfaces';
 import {DataSource} from '@angular/cdk/collections';
-import { Observable, Subject, toArray } from 'rxjs';
+import { Observable, Subject, Subscription, toArray } from 'rxjs';
 
 export class GradeDataSource extends DataSource<GradeCollectionBySubject> {
   /** Stream of data that is provided to the table. */
@@ -27,16 +27,20 @@ export class GradeDataSource extends DataSource<GradeCollectionBySubject> {
   templateUrl: './grades.component.html',
   styleUrls: ['./grades.component.scss'],
 })
-export class GradesComponent implements OnInit {
+export class GradesComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['subject'];
   dataSource = new GradeDataSource()
   maxGradeLength = 0
   gradeArray = Array.from({length: 10}, (e, i)=> i)
+  private requests: Subscription[] = []
 
   constructor(private webUntis: WebuntisService) {}
+  ngOnDestroy(): void {
+    this.requests.forEach(request => request.unsubscribe())
+}
 
   ngOnInit(): void {
-    this.webUntis.getGrades().pipe(toArray()).subscribe(value =>
+    this.requests.push(this.webUntis.getGrades().pipe(toArray()).subscribe(value =>
       {
         value.forEach(subject => {
           const len = subject.gradesWithMarks.length
@@ -49,5 +53,6 @@ export class GradesComponent implements OnInit {
         this.displayedColumns.push('average')
         this.dataSource.update(value)
       })
+    )
   }
 }

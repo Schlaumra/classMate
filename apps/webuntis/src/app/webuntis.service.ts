@@ -71,41 +71,38 @@ export class WebuntisService {
     }
   }
 
-  login(school: string, username: string, password: string): Observable<[DataSubject, LoginDtoResponse]> {
+  login(school: string, username: string, password: string): Observable<DataSubject> {
     this.oldApiConnection.currentUrl = `${this.oldApiConnection.baseUrl}?school=${school}`
     this.apiConnection.school = school
 
-    const session$ = this.postOldApi<LoginDtoResponse>(Method.AUTH, { user: username, password: password, client: this.apiDefinition.client}).pipe(
+    return this.postOldApi<LoginDtoResponse>(Method.AUTH, { user: username, password: password, client: this.apiDefinition.client}).pipe(
       tap(value => {
-        console.log("result", value)
         this.subject = value.result
         this.cookieService.set('JSESSIONID', this.subject.sessionId);
       }),
-    );
-
-    // TODO: Timeout ECONNRESET
-
-    const data$ = this.http.get('/api/WebUntis/api/token/new', {responseType: "text" }).pipe(
-      tap(value2 => {
-        this.apiConnection.token = value2
-        this.apiConnection.connected = true
-      }),
       switchMap(() => {
-        return this.getData().pipe(
-          tap(value3 => {
-            this.data = value3
-            if (this.data.user.roles.includes("STUDENT")) {
-              this.student = this.data.user.person
-            }
-            else {
-              this.student = this.data.user.students[0]
-            }
+        return this.http.get('/api/WebUntis/api/token/new', {responseType: "text" }).pipe(
+          tap(value2 => {
+            console.log("TOKEN")
+            this.apiConnection.token = value2
+            this.apiConnection.connected = true
+          }),
+          switchMap(() => {
+            return this.getData().pipe(
+              tap(value3 => {
+                this.data = value3
+                if (this.data.user.roles.includes("STUDENT")) {
+                  this.student = this.data.user.person
+                }
+                else {
+                  this.student = this.data.user.students[0]
+                }
+              })
+            )
           })
         )
       })
-    )
-
-    return forkJoin([data$, session$])
+    );
   }
 
   logout(): Observable<any> {
@@ -114,6 +111,8 @@ export class WebuntisService {
       tap(() => {
         this.apiConnection.logout()
         this.oldApiConnection.logout()
+        this.cookieService.deleteAll()
+        console.log(this.apiConnection, this.oldApiConnection)
       })
     );
   }
