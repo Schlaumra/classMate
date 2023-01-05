@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="48"
+   height="48"
+   viewBox="0 0 12.7 12.7"
+   version="1.1"
+   id="svg5"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs2" />
+  <g
+     id="layer1">
+    <g
+       id="g13384"
+       transform="matrix(0.07943871,0,0,0.07943871,0.26507407,-6.7835114)">
+      <g
+         id="g13366"
+         transform="translate(-0.84323153,-1.3564877)">
+        <rect
+           style="fill:#4033b8;fill-opacity:1;stroke-width:0.115015"
+           id="rect3040"
+           width="5.8111358"
+           height="31.729342"
+           x="92.031319"
+           y="157.75581"
+           transform="matrix(0.99999993,-3.6835442e-4,8.9642826e-4,0.9999996,0,0)" />
+        <rect
+           style="fill:#4033b8;fill-opacity:1;stroke-width:0.0187279"
+           id="rect6834"
+           width="5.8111358"
+           height="0.84125936"
+           x="92.031319"
+           y="156.43954"
+           transform="matrix(0.99999993,-3.6835442e-4,8.9642826e-4,0.9999996,0,0)" />
+        <rect
+           style="fill:#4033b8;fill-opacity:1;stroke-width:0.0625821"
+           id="rect6888"
+           width="5.8111358"
+           height="9.3940134"
+           x="92.031319"
+           y="146.63013"
+           transform="matrix(0.99999993,-3.6835442e-4,8.9642826e-4,0.9999996,0,0)" />
+        <path
+           id="rect9068"
+           style="fill:#4033b8;fill-opacity:1;stroke-width:0.0650982"
+           d="m 92.201711,190.04407 5.811137,-0.002 c -3.570174,11.57552 -1.936162,11.67725 -5.811137,0.002 z" />
+        <rect
+           style="fill:#4033b8;fill-opacity:1;stroke-width:0.0274078"
+           id="rect10619"
+           width="8.2532969"
+           height="1.2686293"
+           x="92.031319"
+           y="146.63013"
+           transform="matrix(0.99999993,-3.6835442e-4,8.9642826e-4,0.9999996,0,0)" />
+        <rect
+           style="fill:#4033b8;fill-opacity:1;stroke-width:0.0516013"
+           id="rect10621"
+           width="1.7716488"
+           height="20.948441"
+           x="99.061974"
+           y="146.63013"
+           transform="matrix(0.99999993,-3.6835442e-4,8.9642826e-4,0.9999996,0,0)" />
+        <rect
+           style="fill:#4033b8;fill-opacity:1;stroke-width:0.0284552"
+           id="rect12095"
+           width="3.8350639"
+           height="2.9427743"
+           x="93.073563"
+           y="143.30768"
+           transform="matrix(0.9999998,-6.2800898e-4,5.2579401e-4,0.99999986,0,0)" />
+      </g>
+      <text
+         xml:space="preserve"
+         style="font-size:60.833px;fill:#1f1818;stroke-width:5.07739;stroke-dasharray:none"
+         x="3.8545513"
+         y="181.28088"
+         id="text13087"
+         transform="scale(0.91878264,1.0883967)"><tspan
+           id="tspan13085"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:60.833px;font-family:'DejaVu Serif';-inkscape-font-specification:'DejaVu Serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:5.07739;stroke-dasharray:none"
+           x="3.8545513"
+           y="181.28088">Un is</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:57.5212px;font-family:'DejaVu Serif';-inkscape-font-specification:'DejaVu Serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#4033b8;fill-opacity:1;stroke-width:0.250572;stroke-dasharray:none"
+         x="5.4283648"
+         y="137.57487"
+         id="text13370"
+         transform="scale(0.9455594,1.057575)"><tspan
+           id="tspan13368"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:21.3486px;font-family:'DejaVu Serif';-inkscape-font-specification:'DejaVu Serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.250573"
+           x="5.4283648"
+           y="137.57487">Geek</tspan></text>
+    </g>
+  </g>
+</svg>

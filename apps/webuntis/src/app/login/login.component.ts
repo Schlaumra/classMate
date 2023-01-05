@@ -1,52 +1,35 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import {FormBuilder, Validators} from "@angular/forms";
-import {WebuntisService} from "../webuntis.service";
-import {DataSubject, LoginDtoResponse, PersonType} from "@webuntis/api-interfaces";
-import {map, Observable, Subscription} from "rxjs";
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from "@angular/forms";
+import { WebuntisService } from "../webuntis/webuntis.service";
 import { Router } from '@angular/router';
 
 
 @Component({
   selector: 'webuntis-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit, OnDestroy {
-  baseUrl = 'localhost:4200/api';
-  school = 'lbs-brixen';
+export class LoginComponent implements OnInit {
+  private school = ""
 
   loginForm = this.formBuilder.group({
     username: ['', Validators.required],
     password: ['', Validators.required],
   });
-
-  private subject: Observable<DataSubject> | undefined
-  private requests: Subscription[] = []
+  hide = true
 
   constructor(private webUntis: WebuntisService, private formBuilder: FormBuilder, private router: Router) {
 
   }
   ngOnInit(): void {
-    console.log(this.subject)
-    console.log(this.webUntis.data)
-    console.log(this.webUntis.apiConnection)
+    this.school = 'lbs-brixen';
   }
 
-  ngOnDestroy(): void {
-      this.requests.forEach(request => request.unsubscribe())
-  }
-
-  login(): boolean {
+  login(): void {
     const { username, password } = this.loginForm.value;
     if (username && password)
     {
-      this.subject = this.webUntis.login(this.school, username, password)
-
-      this.requests.push(this.subject.subscribe(value => {
-        console.log("Login: ", value)
-        this.router.navigate(['grades'])
-      }))
+      this.webUntis.login(this.school, username, password).subscribe(() => this.router.navigate(['grades']))
     }
-    return false
   }
 }

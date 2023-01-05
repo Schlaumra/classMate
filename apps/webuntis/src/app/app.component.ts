@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { WebuntisService } from './webuntis.service';
+import { WebuntisService } from './webuntis/webuntis.service';
 
 @Component({
   selector: 'webuntis-root',
@@ -9,12 +9,10 @@ import { WebuntisService } from './webuntis.service';
 })
 export class AppComponent {
 
-  constructor(private webUntis: WebuntisService, private router: Router) {}
+  constructor(protected webUntis: WebuntisService, private router: Router) {}
 
   logout() {
-    console.log("Logout")
     this.webUntis.logout().subscribe()
-    console.log(this.webUntis.apiConnection)
     this.router.navigate(['login'])
   }
 }

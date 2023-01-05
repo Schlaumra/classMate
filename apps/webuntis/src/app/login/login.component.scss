@@ -1,0 +1,19 @@
+@use '@angular/material' as mat;
+
+.login-component {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.login-box {
+    padding: 0 2.5rem 3rem 2.5rem;
+    border-radius: 10px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 100rem;
+}

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { WebuntisService } from '../webuntis.service';
-import { Grade, GradeCollectionBySubject } from '@webuntis/api-interfaces';
+import { WebuntisService } from '../webuntis/webuntis.service';
+import { GradeCollectionBySubject } from '@webuntis/api-interfaces';
 import {DataSource} from '@angular/cdk/collections';
 import { Observable, Subject, Subscription, toArray } from 'rxjs';
 

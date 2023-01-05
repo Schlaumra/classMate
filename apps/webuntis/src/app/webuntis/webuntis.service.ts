@@ -1,14 +1,28 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Observable, tap, map, mergeMap, from, concatMap, switchMap, forkJoin} from "rxjs";
+import {Observable, tap, map, mergeMap, from, switchMap, throwError, finalize, shareReplay} from "rxjs";
 import {DataSubject, dto, GetCurrentSchoolYearDtoResponse, Grade, GradeCollectionBySubject, jsonRpc, Lesson, LoginDtoResponse, Method, Person, PersonType} from "@webuntis/api-interfaces";
 import { CookieService } from 'ngx-cookie-service';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
-interface ApiConnection {
-  connected: boolean,
-  token: string,
-  school: string
-  logout: () => void
+interface jwtToken {
+  tenant_id: string,          // "1243800"
+  sub: string,                // "Amh-Rap"
+  roles: string,              // "STUDENT"
+  iss: string,                // "webuntis"
+  locale: string,             // "de"
+  sc: string,                 // "it"
+  user_type: string,          // "USER"
+  user_id: number,            // 949
+  host: string,               // "mese.webuntis.com"
+  sn: string,                 // "lbs-brixen"
+  scopes: string,             // "mg:r"
+  exp: number,                // 1672911732
+  per: string[],              // ["mg:r"]
+  iat: number,                // 1672910832
+  username: string,           // "Amh-Rap"
+  sr: string,                 // "IT-32"
+  person_id: 770
 }
 
 @Injectable({
@@ -28,29 +42,31 @@ export class WebuntisService {
     baseUrl: '/api/WebUntis/api/',
     client: 'geekUntis',
   }
+  school = ''
 
-  apiConnection: ApiConnection = {
-    connected: false,
-    token: '',
-    school: '',
-    logout: () => {
-      this.apiConnection.connected = false
-      this.apiConnection.token = ''
-      this.apiConnection.school = ''
-    }
+  set student(v : Person) {
+    localStorage.setItem('student', JSON.stringify(v))
+  }
+
+  
+  get student() : Person {
+    const student = localStorage.getItem('student')
+    if (student) { return JSON.parse(student) }
+    console.log(student)
+    throw Error("Not logged in as a User")
   }
 
 
-
-
   
-
   subject!: { klasseId: number; personId: number; personType: PersonType; sessionId: string; }
-  student!: Person
   data!: DataSubject
 
 
-  constructor(private http: HttpClient, private cookieService: CookieService) { }
+  constructor(private http: HttpClient, private cookieService: CookieService, public jwtHelper: JwtHelperService) { }
+
+  
+
+  
 
   postOldApi<T>(method: Method, params: object = {}) {
     const body: dto = {
@@ -63,17 +79,19 @@ export class WebuntisService {
   }
 
   getApi<T>(path: string, headers?: HttpHeaders | {[header: string]: string | string[];} | undefined) {
-    if (this.apiConnection.connected) {
-      return this.http.get<T>(this.apiDefinition.baseUrl + path, { headers: headers })
-    }
-    else {
-      throw Error("Not connected - GeekUntis")
-    }
+    return this.http.get<T>(this.apiDefinition.baseUrl + path, { headers: headers }).pipe(
+      tap(() => {
+        if (!this.jwtHelper.tokenGetter()) {
+          throwError(() => Error("Not connected - GeekUntis"))
+        }
+      })
+    )
   }
 
   login(school: string, username: string, password: string): Observable<DataSubject> {
+
     this.oldApiConnection.currentUrl = `${this.oldApiConnection.baseUrl}?school=${school}`
-    this.apiConnection.school = school
+    this.school = school
 
     return this.postOldApi<LoginDtoResponse>(Method.AUTH, { user: username, password: password, client: this.apiDefinition.client}).pipe(
       tap(value => {
@@ -82,37 +100,39 @@ export class WebuntisService {
       }),
       switchMap(() => {
         return this.http.get('/api/WebUntis/api/token/new', {responseType: "text" }).pipe(
-          tap(value2 => {
-            console.log("TOKEN")
-            this.apiConnection.token = value2
-            this.apiConnection.connected = true
+          tap(token => {
+            localStorage.setItem('apiToken', token)
           }),
-          switchMap(() => {
-            return this.getData().pipe(
-              tap(value3 => {
-                this.data = value3
-                if (this.data.user.roles.includes("STUDENT")) {
-                  this.student = this.data.user.person
-                }
-                else {
-                  this.student = this.data.user.students[0]
-                }
-              })
-            )
-          })
+          switchMap(() => this.getData().pipe(
+            tap(value3 => {
+              this.data = value3
+              console.log(this.data)
+              const apiToken = this.jwtHelper.tokenGetter()
+              if (apiToken)
+              {
+                console.log(this.jwtHelper.decodeToken(apiToken.toString()))
+              }
+              if (this.data.user.roles.includes("STUDENT")) {
+                this.student = this.data.user.person
+              }
+              else {
+                this.student = this.data.user.students[0]
+              }
+            })
+          ))
         )
-      })
+      }),
+      shareReplay()
     );
   }
 
   logout(): Observable<any> {
-    // TODO: Try to logout else do rest
     return this.postOldApi(Method.LOGOUT).pipe(
-      tap(() => {
-        this.apiConnection.logout()
+      finalize(() => {
+        this.school = ''
         this.oldApiConnection.logout()
         this.cookieService.deleteAll()
-        console.log(this.apiConnection, this.oldApiConnection)
+        localStorage.clear()
       })
     );
   }
@@ -133,10 +153,7 @@ export class WebuntisService {
   }
 
   getData(): Observable<DataSubject> {
-    const httpHeaders: HttpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${this.apiConnection.token}`
-    });
-    return this.getApi<DataSubject>('rest/view/v1/app/data', httpHeaders)
+    return this.getApi<DataSubject>('rest/view/v1/app/data')
   }
 
   getGrades(): Observable<GradeCollectionBySubject> {

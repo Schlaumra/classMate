@@ -1,5 +1,23 @@
-<div style="text-align: center">
-  <h1>Welcome to GeekUntis!</h1>
-  <button mat-button (click)="logout()">Logout</button>
+<div class="page">
+  <div class="top-bar">
+    <div class="left"></div>
+    <div class="middle">
+      <img src="../../assets/geekUntisLogo.svg" alt="geekUntis" width="120rem">
+    </div>
+    <div class="right">
+      <button *ngIf="this.webUntis.jwtHelper.tokenGetter()" type="button" color="primary" mat-fab matSuffix (click)="logout()">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </div>
+  </div>
+  
+  <div class="content">
+    <router-outlet></router-outlet>
+  </div>
+  
+  <div class="bottom-bar">
+    <div style="margin: 1rem; text-align: end;">
+      Made by @Schlaumra
+    </div>
+  </div>
 </div>
-<router-outlet></router-outlet>
