@@ -5,7 +5,7 @@
       <img src="../../assets/geekUntisLogo.svg" alt="geekUntis" width="120rem">
     </div>
     <div class="right">
-      <button *ngIf="this.webUntis.jwtHelper.tokenGetter()" type="button" color="primary" mat-fab matSuffix (click)="logout()">
+      <button *ngIf="isLoggedIn()" type="button" color="primary" mat-fab matSuffix (click)="logout()">
         <mat-icon>logout</mat-icon>
       </button>
     </div>

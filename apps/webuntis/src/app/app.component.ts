@@ -9,10 +9,13 @@ import { WebuntisService } from './webuntis/webuntis.service';
 })
 export class AppComponent {
 
-  constructor(protected webUntis: WebuntisService, private router: Router) {}
+  constructor(private webUntis: WebuntisService, private router: Router) {}
 
   logout() {
-    this.webUntis.logout().subscribe()
-    this.router.navigate(['login'])
+    this.webUntis.logout(this.router).subscribe()
+  }
+
+  isLoggedIn(): boolean {
+    return this.webUntis.isLoggedIn()
   }
 }

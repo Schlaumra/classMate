@@ -1,4 +1,4 @@
-export const jsonRpc = '2.0'
+export const jsonRpcVersion = '2.0'
 
 export enum Method {
   AUTH = 'authenticate',
@@ -57,13 +57,19 @@ export interface GetSubjectsDtoResponse extends dtoResponse {
   result: Subject[]
 }
 
+export interface SchoolYear {
+  id: number;
+  name: string;
+  startDate: string;
+  endDate: string;
+}
+
 export interface GetCurrentSchoolYearDtoResponse extends dtoResponse {
-  result: {
-    id: number;
-    name: string;
-    startDate: string;
-    endDate: string;
-  }
+  result: SchoolYear
+}
+
+export interface GetSchoolYearsDtoResponse extends dtoResponse {
+  result: SchoolYear[]
 }
 
 export interface Lesson {

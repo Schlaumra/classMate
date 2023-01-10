@@ -11,11 +11,13 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatTableModule as MatTableModule } from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
+import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { GradesComponent } from './grades/grades.component';
 import { RouterModule } from '@angular/router';
 import { AuthGuard } from './guard/auth.guard';
 import { JwtModule } from '@auth0/angular-jwt';
+import { HttpInterceptorProviders } from './auth/index'
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, GradesComponent],
@@ -25,12 +27,15 @@ import { JwtModule } from '@auth0/angular-jwt';
     HttpClientModule,
     JwtModule.forRoot({
       config: {
-        tokenGetter: () => localStorage.getItem("apiToken"),
+        tokenGetter: () => {
+          return localStorage.getItem("apiToken")
+        },
         allowedDomains: ["messe.webuntis.com"],
         // disallowedRoutes: ["http://example.com/examplebadroute/"],
       }
     }),
     ReactiveFormsModule,
+    CdkAccordionModule,
     MatButtonModule,
     MatInputModule,
     MatIconModule,
@@ -42,7 +47,7 @@ import { JwtModule } from '@auth0/angular-jwt';
     {path: '**', component: LoginComponent},
   ]),
   ],
-  providers: [CookieService],
+  providers: [CookieService, HttpInterceptorProviders],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,22 +1,59 @@
-<div class="mat-elevation-z8">
-  <mat-table #table [dataSource]="dataSource">
+<div *ngIf="mobile; then mobileView else desktopView"></div>
+<ng-template #desktopView>
+  <div class="mat-elevation-z8">
+    <mat-table #table [dataSource]="dataSource">
 
-    <ng-container matColumnDef="subject">
-      <mat-header-cell class="matColumn" *matHeaderCellDef> Subject </mat-header-cell>
-      <mat-cell class="matColumn" *matCellDef="let element"> {{element.lesson.subjects}} </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="subject">
+        <mat-header-cell class="matColumn" *matHeaderCellDef> Subject </mat-header-cell>
+        <mat-cell class="matColumn" *matCellDef="let element"> {{element.lesson.subjects}} </mat-cell>
+      </ng-container>
+  
+      <ng-container *ngFor="let n of gradeArray" matColumnDef="{{n}}">
+        <mat-header-cell class="matColumnGrades" *matHeaderCellDef></mat-header-cell>
+        <mat-cell class="matColumnGrades" *matCellDef="let element"> {{element.gradesWithMarks[n]?.mark.name }} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="average">
+        <mat-header-cell class="matColumn" *matHeaderCellDef> Average </mat-header-cell>
+        <mat-cell class="matColumn" *matCellDef="let element"> {{ element.averageMark }} </mat-cell>
+      </ng-container>
+  
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+  </div>
+</ng-template>
 
-    <ng-container *ngFor="let n of gradeArray" matColumnDef="{{n}}">
-      <mat-header-cell class="matColumnGrades" *matHeaderCellDef></mat-header-cell>
-      <mat-cell class="matColumnGrades" *matCellDef="let element"> {{element.gradesWithMarks[n]?.mark.name }} </mat-cell>
-    </ng-container>
 
-    <ng-container matColumnDef="average">
-      <mat-header-cell class="matColumn" *matHeaderCellDef> Average </mat-header-cell>
-      <mat-cell class="matColumn" *matCellDef="let element"> {{ element.averageMark }} </mat-cell>
-    </ng-container>
-
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
-</div>
+<ng-template #mobileView>
+  <cdk-accordion class="grade-accordion mat-elevation-z8">
+    <cdk-accordion-item
+      *ngFor="let item of dataSource.connect() | async; let index = index;"
+      #accordionItem="cdkAccordionItem"
+      class="item"
+      role="button"
+      tabindex="0"
+      [attr.id]="'accordion-header-' + index"
+      [attr.aria-expanded]="accordionItem.expanded"
+      [attr.aria-controls]="'accordion-body-' + index">
+      <div class="item-header" (click)="accordionItem.toggle()">
+        <div>
+          <mat-icon aria-hidden="false" aria-label="Example home icon">{{ accordionItem.expanded ? 'expand_less' : 'expand_more' }}</mat-icon>
+          <span>{{ item.lesson.subjects }}</span>
+        </div>
+        <span>{{ item.averageMark }}</span>
+      </div>
+      <div
+        class="item-body"
+        role="region"
+        [style.display]="accordionItem.expanded ? '' : 'none'"
+        [attr.id]="'accordion-body-' + index"
+        [attr.aria-labelledby]="'accordion-header-' + index">
+        <div *ngFor="let grade of item.grades" class="grade-row">
+          <span>{{ grade.date }}</span>
+          <span>{{ grade.mark.name }}</span>
+        </div>
+      </div>
+    </cdk-accordion-item>
+  </cdk-accordion>
+</ng-template>
