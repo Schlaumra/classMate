@@ -12,7 +12,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule } from '@angular/material/table';
-import { CdkAccordionModule } from '@angular/cdk/accordion';
+import { MatDividerModule } from '@angular/material/divider'
+import { MatExpansionModule } from '@angular/material/expansion';
 import { GradesComponent } from './grades/grades.component';
 import { RouterModule } from '@angular/router';
 import { AuthGuard } from './guard/auth.guard';
@@ -35,10 +36,11 @@ import { HttpInterceptorProviders } from './auth/index'
       }
     }),
     ReactiveFormsModule,
-    CdkAccordionModule,
+    MatExpansionModule,
     MatButtonModule,
     MatInputModule,
     MatIconModule,
+    MatDividerModule,
     MatTableModule,
     MatCardModule,
     RouterModule.forRoot([

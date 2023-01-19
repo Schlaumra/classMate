@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { WebuntisService } from '../webuntis/webuntis.service';
 import { GradeCollectionBySubject } from '@webuntis/api-interfaces';
 import {DataSource} from '@angular/cdk/collections';
 import { Observable, ReplaySubject, Subject, takeUntil, toArray } from 'rxjs';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {MatAccordion} from '@angular/material/expansion';
 
 export class GradeDataSource extends DataSource<GradeCollectionBySubject> {
   /** Stream of data that is provided to the table. */
@@ -36,7 +37,7 @@ export class GradesComponent implements OnInit, OnDestroy {
   maxGradeLength = 0
   gradeArray = Array.from({length: 10}, (e, i)=> i)
 
-  constructor(private webUntis: WebuntisService, breakpointObserver: BreakpointObserver) {
+  constructor(protected webUntis: WebuntisService, breakpointObserver: BreakpointObserver) {
     breakpointObserver
     .observe([
       Breakpoints.XSmall,

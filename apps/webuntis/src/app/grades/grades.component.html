@@ -1,10 +1,10 @@
 <div *ngIf="mobile; then mobileView else desktopView"></div>
 <ng-template #desktopView>
-  <div class="mat-elevation-z8">
+  <div class="mat-elevation-z8 grade-table">
     <mat-table #table [dataSource]="dataSource">
 
       <ng-container matColumnDef="subject">
-        <mat-header-cell class="matColumn" *matHeaderCellDef> Subject </mat-header-cell>
+        <mat-header-cell class="matColumnSubject" *matHeaderCellDef> Subject </mat-header-cell>
         <mat-cell class="matColumn" *matCellDef="let element"> {{element.lesson.subjects}} </mat-cell>
       </ng-container>
   
@@ -14,8 +14,8 @@
       </ng-container>
   
       <ng-container matColumnDef="average">
-        <mat-header-cell class="matColumn" *matHeaderCellDef> Average </mat-header-cell>
-        <mat-cell class="matColumn" *matCellDef="let element"> {{ element.averageMark }} </mat-cell>
+        <mat-header-cell class="matColumnAverage" *matHeaderCellDef> Average </mat-header-cell>
+        <mat-cell class="matColumn" *matCellDef="let element"> {{ element.averageMark || '/' }} </mat-cell>
       </ng-container>
   
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -26,7 +26,30 @@
 
 
 <ng-template #mobileView>
-  <cdk-accordion class="grade-accordion mat-elevation-z8">
+  <mat-accordion class="grade-accordion" multi>
+    <mat-expansion-panel *ngFor="let item of dataSource.connect() | async;" [disabled]="item.grades.length===0">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ item.lesson.subjects }}
+        </mat-panel-title>
+        <mat-panel-description>
+          {{ item.averageMark || ''}}
+          <!-- <mat-icon>account_circle</mat-icon> -->
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="item-body">
+        <div *ngFor="let grade of item.grades">
+          <mat-divider></mat-divider>
+          <div class="grade-row">
+            <span>{{ webUntis.convertDate(grade.date.toString()) | date }}</span>
+            <span>{{ grade.mark.name }}</span>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  
+  </mat-accordion>
+  <!-- <cdk-accordion class="grade-accordion mat-elevation-z8">
     <cdk-accordion-item
       *ngFor="let item of dataSource.connect() | async; let index = index;"
       #accordionItem="cdkAccordionItem"
@@ -36,24 +59,7 @@
       [attr.id]="'accordion-header-' + index"
       [attr.aria-expanded]="accordionItem.expanded"
       [attr.aria-controls]="'accordion-body-' + index">
-      <div class="item-header" (click)="accordionItem.toggle()">
-        <div>
-          <mat-icon aria-hidden="false" aria-label="Example home icon">{{ accordionItem.expanded ? 'expand_less' : 'expand_more' }}</mat-icon>
-          <span>{{ item.lesson.subjects }}</span>
-        </div>
-        <span>{{ item.averageMark }}</span>
-      </div>
-      <div
-        class="item-body"
-        role="region"
-        [style.display]="accordionItem.expanded ? '' : 'none'"
-        [attr.id]="'accordion-body-' + index"
-        [attr.aria-labelledby]="'accordion-header-' + index">
-        <div *ngFor="let grade of item.grades" class="grade-row">
-          <span>{{ grade.date }}</span>
-          <span>{{ grade.mark.name }}</span>
-        </div>
-      </div>
+      
     </cdk-accordion-item>
-  </cdk-accordion>
+  </cdk-accordion> -->
 </ng-template>

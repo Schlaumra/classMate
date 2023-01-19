@@ -262,4 +262,11 @@ export class WebuntisService {
       })
     );
   }
+
+  convertDate(date: string): Date {
+    const year = Number(date.slice(0, 4))
+    const month = Number(date.slice(4, 6))
+    const day = Number(date.slice(-2))
+    return new Date(year, month-1, day)
+  }
 }
