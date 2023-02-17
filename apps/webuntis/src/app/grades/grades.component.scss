@@ -1,6 +1,25 @@
+.card-overview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin: 2rem 0;
+
+
+  .mat-mdc-card {
+    flex-grow: 1;
+
+    .mat-mdc-card-content {
+      text-align: center;
+      margin: 2rem 4rem;
+      font-weight: 600;
+      font-size: 2rem;
+    }
+
+  }
+}
 
 .grade-table {
-  margin: 2rem 4rem;
+  margin: 2rem 0;
 
   .matColumnGrades {
     // border-right: .05rem solid rgba(0, 0, 0, 0.1);
@@ -11,6 +30,10 @@
 
   .matColumn {
       // flex-grow: 2;
+  }
+
+  .mat-mdc-row:hover {
+    background-color: rgba($color: #000000, $alpha: 0.05);
   }
 
   .cdk-column-average {
@@ -27,13 +50,20 @@
 
 
 .grade-accordion {
-  
+  display: block;
+
   .item-body {
     
     .grade-row {
+
       display: flex;
       justify-content: space-between;
       padding: 1rem 0.5rem;
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: right;
     }
   }
 }

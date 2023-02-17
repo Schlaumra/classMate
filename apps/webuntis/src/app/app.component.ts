@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { WebuntisService } from './webuntis/webuntis.service';
+import { LoadingService } from './loading/loading.service'
 
 @Component({
   selector: 'webuntis-root',
@@ -9,7 +10,11 @@ import { WebuntisService } from './webuntis/webuntis.service';
 })
 export class AppComponent {
 
-  constructor(private webUntis: WebuntisService, private router: Router) {}
+  contentIsLoading = true
+
+  constructor(private webUntis: WebuntisService, private router: Router, private activatedRoute: ActivatedRoute, private loading: LoadingService) {
+    this.loading.isLoading$.subscribe(isLoading => this.contentIsLoading = isLoading)
+  }
 
   logout() {
     this.webUntis.logout(this.router).subscribe()
@@ -17,5 +22,17 @@ export class AppComponent {
 
   isLoggedIn(): boolean {
     return this.webUntis.isLoggedIn()
+  }
+
+  backExists(): boolean {
+    return this.activatedRoute.firstChild?.component?.name === 'SubjectComponent' ? true : false
+  }
+
+  back() {
+    this.router.navigate(['grades'])
+  }
+
+  backToHome() {
+    this.router.navigate([''])
   }
 }

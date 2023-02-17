@@ -1,10 +1,29 @@
+<div class="card-overview">
+  <mat-card class="avg-mark">
+    <mat-card-header>
+      <mat-card-title>Average Mark</mat-card-title>
+      <mat-card-subtitle>All subjects</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="mark" [style.color]="this.averageMark | colorMark">{{ this.averageMark | number: '1.0-2' }}</div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Mark Ratio</mat-card-title>
+      <mat-card-subtitle>Positive/Negative</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content><span style="color: rgb(0, 94, 0);">{{ this.positiveMarks }}</span> / <span style="color: rgb(173, 0, 0);">{{ this.negativeMarks }}</span></mat-card-content>
+  </mat-card>
+</div>
+
 <div *ngIf="mobile; then mobileView else desktopView"></div>
 <ng-template #desktopView>
   <div class="mat-elevation-z8 grade-table">
     <mat-table #table [dataSource]="dataSource">
 
       <ng-container matColumnDef="subject">
-        <mat-header-cell class="matColumnSubject" *matHeaderCellDef> Subject </mat-header-cell>
+        <mat-header-cell class="matColumnSubject" *matHeaderCellDef mat-sort-header> Subject </mat-header-cell>
         <mat-cell class="matColumn" *matCellDef="let element"> {{element.lesson.subjects}} </mat-cell>
       </ng-container>
   
@@ -15,11 +34,12 @@
   
       <ng-container matColumnDef="average">
         <mat-header-cell class="matColumnAverage" *matHeaderCellDef> Average </mat-header-cell>
-        <mat-cell class="matColumn" *matCellDef="let element"> {{ element.averageMark || '/' }} </mat-cell>
+        <mat-cell class="matColumn" *matCellDef="let element" [style.color]="element.averageMark | colorMark"> {{ ((element.averageMark || '') | number: '0.0-1') || '/' }} </mat-cell>
       </ng-container>
   
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="redirectToSubject(row?.lesson?.id)"></mat-row>
+    
     </mat-table>
   </div>
 </ng-template>
@@ -32,8 +52,8 @@
         <mat-panel-title>
           {{ item.lesson.subjects }}
         </mat-panel-title>
-        <mat-panel-description>
-          {{ item.averageMark || ''}}
+        <mat-panel-description [style.color]="item.averageMark | colorMark">
+          {{ ((item.averageMark || '') | number: '0.0-1') || '' }}
           <!-- <mat-icon>account_circle</mat-icon> -->
         </mat-panel-description>
       </mat-expansion-panel-header>
@@ -45,21 +65,11 @@
             <span>{{ grade.mark.name }}</span>
           </div>
         </div>
+        <div class="btn-row">
+          <button mat-stroked-button (click)="redirectToSubject(item.lesson.id)">Analytics</button>
+        </div>
       </div>
     </mat-expansion-panel>
   
   </mat-accordion>
-  <!-- <cdk-accordion class="grade-accordion mat-elevation-z8">
-    <cdk-accordion-item
-      *ngFor="let item of dataSource.connect() | async; let index = index;"
-      #accordionItem="cdkAccordionItem"
-      class="item"
-      role="button"
-      tabindex="0"
-      [attr.id]="'accordion-header-' + index"
-      [attr.aria-expanded]="accordionItem.expanded"
-      [attr.aria-controls]="'accordion-body-' + index">
-      
-    </cdk-accordion-item>
-  </cdk-accordion> -->
 </ng-template>

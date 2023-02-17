@@ -10,11 +10,14 @@ import {
   throwError,
   finalize,
   shareReplay,
+  filter,
 } from 'rxjs';
 import {
   DataSubject,
   dto,
   GetCurrentSchoolYearDtoResponse,
+  GetSubjectsDtoResponse,
+  Subject,
   Grade,
   GradeCollectionBySubject,
   jsonRpcVersion,
@@ -60,28 +63,26 @@ export class WebuntisService {
     client: 'geekUntis',
   };
 
-  jsonrpcApiConnection = {
-  };
+  jsonrpcApiConnection = {};
 
   set school(v: string) {
-    localStorage.setItem('school', v)
+    localStorage.setItem('school', v);
   }
 
   get school(): string {
-    return localStorage.getItem('school') || ''
+    return localStorage.getItem('school') || '';
   }
-  
-  set currentYear(v : SchoolYear | null) {
-    localStorage.setItem('schoolYear', JSON.stringify(v))
+
+  set currentYear(v: SchoolYear | null) {
+    localStorage.setItem('schoolYear', JSON.stringify(v));
   }
 
   get currentYear(): SchoolYear | null {
-    const i = localStorage.getItem('schoolYear')
+    const i = localStorage.getItem('schoolYear');
     if (i) {
-      return JSON.parse(i) as SchoolYear
-    }
-    else {
-      return null
+      return JSON.parse(i) as SchoolYear;
+    } else {
+      return null;
     }
   }
 
@@ -103,7 +104,7 @@ export class WebuntisService {
   }
 
   get sessionId(): string {
-    return this.cookieService.get('JSESSIONID')
+    return this.cookieService.get('JSESSIONID');
   }
 
   set token(v: string) {
@@ -111,7 +112,7 @@ export class WebuntisService {
   }
 
   get token(): string {
-    return localStorage.getItem('apiToken') || ''
+    return localStorage.getItem('apiToken') || '';
   }
 
   constructor(
@@ -135,7 +136,10 @@ export class WebuntisService {
       params: params,
       jsonrpc: this.apiDefinition.jsonRpcVersion,
     };
-    return this.http.post<T>(`${this.apiDefinition.jsonRpcUrl}?school=${this.school}`, body);
+    return this.http.post<T>(
+      `${this.apiDefinition.jsonRpcUrl}?school=${this.school}`,
+      body
+    );
   }
 
   getApi<T>(
@@ -169,21 +173,21 @@ export class WebuntisService {
           this.student = this.data.user.students[0];
         }
       })
-    )
-
-    const token$ = this.http
-    .get('/api/WebUntis/api/token/new', { responseType: 'text' })
-    .pipe(
-      tap((jwtToken) => {
-        this.token = jwtToken
-      }),
-      switchMap(() => data$)
     );
 
+    const token$ = this.http
+      .get('/api/WebUntis/api/token/new', { responseType: 'text' })
+      .pipe(
+        tap((jwtToken) => {
+          this.token = jwtToken;
+        }),
+        switchMap(() => data$)
+      );
+
     const currentSchoolYear$ = this.getCurrentSchoolYear().pipe(
-      tap(currentSchoolYear => this.currentYear = currentSchoolYear.result),
+      tap((currentSchoolYear) => (this.currentYear = currentSchoolYear.result)),
       mergeMap(() => token$)
-    )
+    );
 
     const session$ = this.postJsonRpcApi<LoginDtoResponse>(Method.AUTH, {
       user: username,
@@ -197,9 +201,7 @@ export class WebuntisService {
       shareReplay()
     );
 
-    return session$.pipe(
-      switchMap(() => currentSchoolYear$)
-    )
+    return session$.pipe(switchMap(() => currentSchoolYear$));
   }
 
   isLoggedIn(): boolean {
@@ -217,6 +219,18 @@ export class WebuntisService {
     );
   }
 
+  getSubjects(): Observable<Subject[]> {
+    return this.postJsonRpcApi<GetSubjectsDtoResponse>(Method.GETSUBJECTS).pipe(
+      map(value => value.result)
+    )
+  }
+
+  getSubject(name: string): Observable<Subject | undefined> {
+    return this.getSubjects().pipe(
+      map(value => value.find(val => val.name == name))
+    )
+  }
+
   getLessons(): Observable<Lesson> {
     return this.getApi<{ data: { lessons: Lesson[] } }>(
       `classreg/grade/grading/list?studentId=${this.student.id}&schoolyearId=${this.currentYear?.id}`
@@ -228,45 +242,44 @@ export class WebuntisService {
   }
 
   getCurrentSchoolYear(): Observable<GetCurrentSchoolYearDtoResponse> {
-    return this.postJsonRpcApi<GetCurrentSchoolYearDtoResponse>(Method.GETCURRENTSCHOOLYEAR);
+    return this.postJsonRpcApi<GetCurrentSchoolYearDtoResponse>(
+      Method.GETCURRENTSCHOOLYEAR
+    );
   }
 
-  getGrades(): Observable<GradeCollectionBySubject> {
-    return this.getLessons().pipe(
-      mergeMap((lesson) => {
-        return this.getApi<{ data: GradeCollectionBySubject }>(
-          `classreg/grade/grading/lesson?studentId=${this.student.id}&lessonId=${lesson.id}`
-        ).pipe(
-          map((data) => {
-            const res = data.data;
-            res.gradesWithMarks = res.grades.filter(
-              (value: Grade) => value.mark.markValue != 0
-            );
-            if (res.gradesWithMarks.length > 0) {
-              res.averageMark = Number(
-                (
-                  res.gradesWithMarks.reduce(
-                    (sum, current) => (sum += current.mark.markValue),
-                    0
-                  ) /
-                  res.gradesWithMarks.length /
-                  100
-                ).toFixed(2)
-              );
-            } else {
-              res.averageMark = 0;
-            }
-            return res;
-          })
+  getSubjectGrades(lessonId: number): Observable<GradeCollectionBySubject> {
+    return this.getApi<{ data: GradeCollectionBySubject }>(
+      `classreg/grade/grading/lesson?studentId=${this.student.id}&lessonId=${lessonId}`
+    ).pipe(
+      filter(data => data.data.lesson.subjects != ''),
+      map((data) => {
+        const res = data.data;
+        res.gradesWithMarks = res.grades.filter(
+          (value: Grade) => value.mark.markValue != 0
         );
+        if (res.gradesWithMarks.length > 0) {
+          res.positiveMarks = res.gradesWithMarks.filter((value: Grade) => value.mark.markDisplayValue >= 6).length
+          res.negativeMarks = res.gradesWithMarks.filter((value: Grade) => value.mark.markDisplayValue < 6).length
+          res.averageMark =
+            res.gradesWithMarks.reduce((sum, current) => (sum += current.mark.markValue), 0) / res.gradesWithMarks.length / 100;
+        } else {
+          res.averageMark = 0;
+        }
+        return res;
       })
     );
   }
 
+  getGrades(): Observable<GradeCollectionBySubject> {
+    return this.getLessons().pipe(
+      mergeMap((lesson) => this.getSubjectGrades(lesson.id))
+    );
+  }
+
   convertDate(date: string): Date {
-    const year = Number(date.slice(0, 4))
-    const month = Number(date.slice(4, 6))
-    const day = Number(date.slice(-2))
-    return new Date(year, month-1, day)
+    const year = Number(date.slice(0, 4));
+    const month = Number(date.slice(4, 6));
+    const day = Number(date.slice(-2));
+    return new Date(year, month - 1, day);
   }
 }

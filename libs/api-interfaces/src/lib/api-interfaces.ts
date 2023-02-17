@@ -5,6 +5,7 @@ export enum Method {
   LOGOUT = 'logout',
   GETCURRENTSCHOOLYEAR = 'getCurrentSchoolyear',
   GETSCHOOLYEARS = 'getSchoolyears',
+  GETSUBJECTS = 'getSubjects'
 }
 
 export enum PersonType {
@@ -43,7 +44,7 @@ export interface LoginDtoResponse extends dtoResponse {
   }
 }
 
-interface Subject {
+export interface Subject {
   id: number,
   name: string,
   alternateName: string,
@@ -111,6 +112,8 @@ export interface GradeCollectionBySubject {
   grades: Grade[];
   gradesWithMarks: Grade[];
   averageMark: number;
+  positiveMarks: number;
+  negativeMarks: number;
   lesson: Lesson;
 }
 

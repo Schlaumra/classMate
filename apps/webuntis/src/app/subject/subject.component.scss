@@ -1,0 +1,30 @@
+.card-overview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin: 2rem 0;
+  
+  .mat-mdc-card {
+    flex-grow: 1;
+
+    .mat-mdc-card-content {
+      text-align: center;
+      margin: 2rem 4rem;
+      font-weight: 600;
+      font-size: 2rem;
+    }
+
+  }
+}
+
+.chart-card {
+  
+  .mat-mdc-card-content {
+    padding: 2rem;
+
+    ngx-charts-line-chart {
+      display: block;
+      overflow: hidden;
+    }
+  }
+}
