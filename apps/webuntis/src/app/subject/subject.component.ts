@@ -5,6 +5,7 @@ import { Grade, GradeCollectionBySubject, Subject } from '@webuntis/api-interfac
 import { Observable } from 'rxjs';
 import { WebuntisService } from '../webuntis/webuntis.service';
 import { LoadingService } from '../loading/loading.service';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
@@ -13,7 +14,7 @@ import { LoadingService } from '../loading/loading.service';
   styleUrls: ['./subject.component.scss'],
 })
 export class SubjectComponent {
-  constructor(private route: ActivatedRoute, private webuntis: WebuntisService, private contentLoading: LoadingService) {
+  constructor(private route: ActivatedRoute, private webuntis: WebuntisService, private contentLoading: LoadingService, private datePipe: DatePipe) {
     this.contentLoading.setLoading(true);
   }
   subject: Observable<GradeCollectionBySubject> | null = null
@@ -50,7 +51,7 @@ export class SubjectComponent {
             if (grade.mark.markDisplayValue != 0)
             {
               this.data[0]["series"].push({
-                "name": `${i+1} - ${this.webuntis.convertDate(grade.date.toString()).getFullYear()}`,
+                "name": `${i+1} - ${this.datePipe.transform(this.webuntis.convertDate(grade.date.toString()))}`,
                 "value": grade.mark.markDisplayValue
               })              
             }

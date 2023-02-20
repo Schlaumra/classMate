@@ -11,6 +11,7 @@ import {
   finalize,
   shareReplay,
   filter,
+  catchError,
 } from 'rxjs';
 import {
   DataSubject,
@@ -27,6 +28,7 @@ import {
   Person,
   PersonType,
   SchoolYear,
+  BadCredentials,
 } from '@webuntis/api-interfaces';
 import { CookieService } from 'ngx-cookie-service';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -195,8 +197,19 @@ export class WebuntisService {
       client: this.apiDefinition.client,
     }).pipe(
       tap((jsonRpcAuth) => {
-        this.subject = jsonRpcAuth.result;
-        this.sessionId = this.subject.sessionId;
+        if (jsonRpcAuth.error) {
+          const error = jsonRpcAuth.error
+          if (error.code == BadCredentials.ErrCode) {
+            throw new BadCredentials()
+          }
+          else {
+            throw Error(`(${error.code}): ${error.message}`)
+          }
+        }
+        else {
+          this.subject = jsonRpcAuth.result;
+          this.sessionId = this.subject.sessionId;
+        }
       }),
       shareReplay()
     );

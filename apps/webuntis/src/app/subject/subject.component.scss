@@ -20,8 +20,10 @@
 .chart-card {
   
   .mat-mdc-card-content {
-    padding: 2rem;
-
+    // padding: 2rem;
+    .chart-container {
+      display: block;
+    }
     ngx-charts-line-chart {
       display: block;
       overflow: hidden;

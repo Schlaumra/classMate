@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { WebuntisService } from './webuntis/webuntis.service';
 import { LoadingService } from './loading/loading.service'
 
@@ -25,7 +25,7 @@ export class AppComponent {
   }
 
   backExists(): boolean {
-    return this.activatedRoute.firstChild?.component?.name === 'SubjectComponent' ? true : false
+    return this.activatedRoute.firstChild?.snapshot.routeConfig?.path === 'subject' ? true : false
   }
 
   back() {

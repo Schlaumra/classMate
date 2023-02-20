@@ -91,4 +91,11 @@ export class GradesComponent implements OnInit, OnDestroy {
       this.router.navigate(['subject'], { queryParams: { id: id}})
     }
   }
+
+  convertToDate(date: string | null): Date | null {
+    if (date) {
+      return this.webUntis.convertDate(date.toString())
+    }
+    return null
+  }
 }

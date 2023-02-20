@@ -29,7 +29,8 @@
   
       <ng-container *ngFor="let n of gradeArray" matColumnDef="{{n}}">
         <mat-header-cell class="matColumnGrades" *matHeaderCellDef></mat-header-cell>
-        <mat-cell class="matColumnGrades" *matCellDef="let element"> {{element.gradesWithMarks[n]?.mark.name }} </mat-cell>
+        
+        <mat-cell class="matColumnGrades" *matCellDef="let element" [matTooltip]="(convertToDate(element.gradesWithMarks[n]?.date) | date) || ''"> {{element.gradesWithMarks[n]?.mark.name }} </mat-cell>
       </ng-container>
   
       <ng-container matColumnDef="average">

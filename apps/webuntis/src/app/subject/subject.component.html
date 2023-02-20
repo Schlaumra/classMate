@@ -24,20 +24,22 @@
     <mat-card-subtitle>Grade performance</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <ngx-charts-line-chart #gradeChart
-            [scheme]="colorScheme"
-            [legend]="false"
-            [showXAxisLabel]="false"
-            [showYAxisLabel]="false"
-            [xAxis]="true"
-            [yAxis]="true"
-            [xAxisTicks]="[]"
-            [yAxisTicks]="[4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10]"
-            [yScaleMax]="yAxisMax"
-            [yScaleMin]="yAxisMin"
-            [xAxisLabel]="'Index'"
-            [yAxisLabel]="'Grade'"
-            [results]="data">
-        </ngx-charts-line-chart>
+        <div class="chart-container">
+            <ngx-charts-line-chart #gradeChart
+                [scheme]="colorScheme"
+                [legend]="false"
+                [showXAxisLabel]="false"
+                [showYAxisLabel]="false"
+                [xAxis]="true"
+                [yAxis]="true"
+                [xAxisTicks]="[]"
+                [yAxisTicks]="[4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10]"
+                [yScaleMax]="yAxisMax"
+                [yScaleMin]="yAxisMin"
+                [xAxisLabel]="'Index'"
+                [yAxisLabel]="'Grade'"
+                [results]="data">
+            </ngx-charts-line-chart>
+        </div>
     </mat-card-content>
 </mat-card>

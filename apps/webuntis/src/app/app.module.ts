@@ -10,6 +10,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule } from '@angular/material/table';
@@ -19,6 +21,7 @@ import { GradesComponent } from './grades/grades.component';
 import { RouterModule } from '@angular/router';
 import { AuthGuard } from './guard/auth.guard';
 import { JwtModule } from '@auth0/angular-jwt';
+import { DatePipe } from '@angular/common'
 
 import { HttpInterceptorProviders } from './auth/index';
 import { ColorMarkPipe } from './pipes/color-mark.pipe';
@@ -54,6 +57,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     MatDividerModule,
     MatProgressSpinnerModule,
     NgxChartsModule,
+    MatTooltipModule,
+    MatSnackBarModule,
     MatTableModule,
     MatCardModule,
     RouterModule.forRoot([
@@ -63,7 +68,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
       { path: '**', component: LoginComponent },
     ]),
   ],
-  providers: [CookieService, HttpInterceptorProviders],
+  providers: [CookieService, HttpInterceptorProviders, DatePipe],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

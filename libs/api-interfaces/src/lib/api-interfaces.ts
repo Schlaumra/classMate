@@ -25,6 +25,23 @@ export interface dtoResponse {
   id: number;
   jsonrpc: string;
   result: object | object[];
+  error: object | object[];
+}
+
+export class DtoError extends Error {
+  public code: number
+
+  constructor(code: number, message: string) {
+    super(message)
+    this.code = code
+  }
+}
+
+export class BadCredentials extends DtoError {
+  static ErrCode = -8504
+  constructor() {
+    super(BadCredentials.ErrCode, "Bad Credentials")
+  }
 }
 
 export interface LoginDto extends dto {
@@ -41,6 +58,10 @@ export interface LoginDtoResponse extends dtoResponse {
     personId: number;
     personType: PersonType;
     sessionId: string;
+  }
+  error: {
+    code: number,
+    message: string
   }
 }
 
