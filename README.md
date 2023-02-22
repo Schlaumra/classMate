@@ -1,8 +1,6 @@
-
 # GeekUntis
 
-A web app for displaying WebUntis grades in a beautiful and organized way. 
-
+A web app for displaying WebUntis grades in a beautiful and organized way.
 
 ## Disclaimer:
 

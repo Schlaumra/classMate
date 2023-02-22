@@ -15,9 +15,15 @@
         "polyfills": "apps/webuntis/src/polyfills.ts",
         "tsConfig": "apps/webuntis/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": ["apps/webuntis/src/favicon.ico", "apps/webuntis/src/assets"],
+        "assets": [
+          "apps/webuntis/src/favicon.ico",
+          "apps/webuntis/src/assets",
+          "apps/webuntis/src/manifest.webmanifest"
+        ],
         "styles": ["apps/webuntis/src/styles.scss"],
-        "scripts": []
+        "scripts": [],
+        "serviceWorker": true,
+        "ngswConfigPath": "apps/webuntis/ngsw-config.json"
       },
       "configurations": {
         "production": {

@@ -7,10 +7,16 @@ import { Pipe, PipeTransform } from '@angular/core';
  * Example:
  *   {{ 2 | exponentialStrength:10 }}
  *   formats to: 1024
-*/
-@Pipe({name: 'colorMark'})
+ */
+@Pipe({ name: 'colorMark' })
 export class ColorMarkPipe implements PipeTransform {
   transform(value: number | null | unknown): string {
-    return value == 0 || value == null ? 'black' : value < 6 ? 'red' : value < 7 ? 'orange' : 'black';
+    return value == 0 || value == null
+      ? 'black'
+      : value < 6
+      ? 'red'
+      : value < 7
+      ? 'orange'
+      : 'black';
   }
 }

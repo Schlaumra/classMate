@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { CanActivate, Router, UrlTree } from '@angular/router';
 import { WebuntisService } from '../webuntis/webuntis.service';
 
 @Injectable({
@@ -8,9 +8,9 @@ import { WebuntisService } from '../webuntis/webuntis.service';
 export class AuthGuard implements CanActivate {
   constructor(private router: Router, private webuntis: WebuntisService) {}
 
-  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): true|UrlTree {
+  canActivate(): true | UrlTree {
     if (!this.webuntis.isLoggedIn()) {
-      return this.router.parseUrl('/login')
+      return this.router.parseUrl('/login');
     }
     return true;
   }

@@ -2,9 +2,9 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="48"
-   height="48"
-   viewBox="0 0 12.7 12.7"
+   width="46.436337"
+   height="7.5742946"
+   viewBox="0 0 12.286281 2.0040321"
    version="1.1"
    id="svg5"
    xmlns="http://www.w3.org/2000/svg"
@@ -12,62 +12,62 @@
   <defs
      id="defs2" />
   <g
-     id="layer1">
+     id="layer1"
+     transform="translate(-0.20419778,-5.5005908)">
     <g
-       id="g13366"
-       transform="matrix(-3.4483878e-4,-0.22382922,0.22382922,-3.4483878e-4,-31.84774,28.183893)">
+       id="g533">
       <rect
-         style="fill:#4033b8;fill-opacity:1;stroke-width:0.115015"
+         style="fill:#ffffff;fill-opacity:1;stroke-width:0.0242826"
          id="rect3040"
-         width="5.8111358"
-         height="31.729342"
-         x="92.031319"
-         y="157.75581"
-         transform="matrix(0.99999993,-3.6835442e-4,8.9642826e-4,0.9999996,0,0)" />
+         width="1.300703"
+         height="6.3187108"
+         x="-7.5089788"
+         y="3.8019843"
+         transform="matrix(-0.00169845,-0.99999856,0.99999625,-0.00273916,0,0)" />
       <rect
-         style="fill:#4033b8;fill-opacity:1;stroke-width:0.0187279"
+         style="fill:#ffffff;fill-opacity:1;stroke-width:0.00591773"
          id="rect6834"
-         width="5.8111358"
-         height="0.84125936"
-         x="92.031319"
-         y="156.43954"
-         transform="matrix(0.99999993,-3.6835442e-4,8.9642826e-4,0.9999996,0,0)" />
+         width="1.3007106"
+         height="0.37526736"
+         x="-7.5031343"
+         y="3.113575"
+         transform="matrix(-0.00380449,-0.99999276,0.99999925,-0.00122284,0,0)" />
       <rect
-         style="fill:#4033b8;fill-opacity:1;stroke-width:0.0625821"
+         style="fill:#ffffff;fill-opacity:1;stroke-width:0.0124095"
          id="rect6888"
-         width="5.8111358"
-         height="9.3940134"
-         x="92.031319"
-         y="146.63013"
-         transform="matrix(0.99999993,-3.6835442e-4,8.9642826e-4,0.9999996,0,0)" />
+         width="1.3007026"
+         height="1.6502168"
+         x="-7.5081954"
+         y="1.1476949"
+         transform="matrix(-0.00149822,-0.99999888,0.99999518,-0.00310523,0,0)" />
       <path
          id="rect9068"
-         style="fill:#4033b8;fill-opacity:1;stroke-width:0.0650982"
-         d="m 92.201711,190.04407 5.811137,-0.002 c -3.570174,11.57552 -1.936162,11.67725 -5.811137,0.002 z" />
+         style="fill:#ffffff;fill-opacity:1;stroke-width:0.013635"
+         d="M 10.5402,7.4000614 10.5377,6.2610798 c 2.59217,0.6962583 2.614377,0.3759614 0.0025,1.1389816 z" />
       <rect
-         style="fill:#4033b8;fill-opacity:1;stroke-width:0.0274078"
+         style="fill:#ffffff;fill-opacity:1;stroke-width:0.00807733"
          id="rect10619"
-         width="8.2532969"
-         height="1.2686293"
-         x="92.031319"
-         y="146.63013"
-         transform="matrix(0.99999993,-3.6835442e-4,8.9642826e-4,0.9999996,0,0)" />
+         width="1.9203178"
+         height="0.47356138"
+         x="-7.5063305"
+         y="1.1010832"
+         transform="matrix(-0.00306268,-0.99999531,0.99999885,-0.00151904,0,0)" />
       <rect
-         style="fill:#4033b8;fill-opacity:1;stroke-width:0.0516013"
+         style="fill:#ffffff;fill-opacity:1;stroke-width:0.0104676"
          id="rect10621"
-         width="1.7716488"
-         height="20.948441"
-         x="99.061974"
-         y="146.63013"
-         transform="matrix(0.99999993,-3.6835442e-4,8.9642826e-4,0.9999996,0,0)" />
+         width="0.35267237"
+         height="4.330389"
+         x="-5.8660378"
+         y="1.1083106"
+         transform="matrix(-0.00198237,-0.99999804,0.99999725,-0.00234685,0,0)" />
       <rect
-         style="fill:#4033b8;fill-opacity:1;stroke-width:0.0284552"
+         style="fill:#ffffff;fill-opacity:1;stroke-width:0.00636911"
          id="rect12095"
-         width="3.8350639"
-         height="2.9427743"
-         x="93.073563"
-         y="143.30768"
-         transform="matrix(0.9999998,-6.2800898e-4,5.2579401e-4,0.99999986,0,0)" />
+         width="0.8584004"
+         height="0.65867966"
+         x="-7.2854609"
+         y="0.1902602"
+         transform="matrix(-0.00216864,-0.99999765,0.99999786,-0.00206642,0,0)" />
     </g>
   </g>
 </svg>

@@ -1,32 +1,37 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-
-import { AppComponent } from './app.component';
+import { DatePipe } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { LoginComponent } from './login/login.component';
+import { isDevMode, NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CookieService } from 'ngx-cookie-service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatInputModule } from '@angular/material/input';
-import { MatIconModule } from '@angular/material/icon';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatTooltipModule } from '@angular/material/tooltip'
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatTableModule } from '@angular/material/table';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { GradesComponent } from './grades/grades.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTableModule } from '@angular/material/table';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-import { AuthGuard } from './guard/auth.guard';
 import { JwtModule } from '@auth0/angular-jwt';
-import { DatePipe } from '@angular/common'
+import { CookieService } from 'ngx-cookie-service';
+import { AppComponent } from './app.component';
+import { GradesComponent } from './grades/grades.component';
+import { AuthGuard } from './guard/auth.guard';
+import { LoginComponent } from './login/login.component';
 
+import { ServiceWorkerModule } from '@angular/service-worker';
+import {
+  HttpCacheInterceptorModule,
+  useHttpCacheLocalStorage
+} from '@ngneat/cashew';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { HttpInterceptorProviders } from './auth/index';
 import { ColorMarkPipe } from './pipes/color-mark.pipe';
 import { SubjectComponent } from './subject/subject.component';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   declarations: [
@@ -56,19 +61,41 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     MatIconModule,
     MatDividerModule,
     MatProgressSpinnerModule,
-    NgxChartsModule,
     MatTooltipModule,
+    MatToolbarModule,
     MatSnackBarModule,
     MatTableModule,
     MatCardModule,
+    NgxChartsModule,
+    HttpCacheInterceptorModule.forRoot({
+      ttl: 1000 * 120, // 2min
+      responseSerializer(body) {
+        return structuredClone(body);
+      },
+    }),
     RouterModule.forRoot([
       { path: 'grades', component: GradesComponent, canActivate: [AuthGuard] },
-      { path: 'subject', component: SubjectComponent, canActivate: [AuthGuard] },
+      {
+        path: 'subject',
+        component: SubjectComponent,
+        canActivate: [AuthGuard],
+      },
       { path: 'login', component: LoginComponent },
       { path: '**', component: LoginComponent },
     ]),
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
   ],
-  providers: [CookieService, HttpInterceptorProviders, DatePipe],
+  providers: [
+    CookieService,
+    DatePipe,
+    HttpInterceptorProviders,
+    useHttpCacheLocalStorage,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

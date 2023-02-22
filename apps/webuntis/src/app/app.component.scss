@@ -1,65 +1,65 @@
-    .page {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #fafafa;
+.page {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 
-    .top-bar {
+  .top-bar {
+    z-index: 999;
+    mat-toolbar {
+      position: fixed;
+    }
+    .left,
+    .right {
+      min-width: 60px;
+    }
+
+    .left {
+      display: flex;
+      justify-content: left;
+      align-items: center;
+    }
+
+    .middle {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+
+      .logo {
         display: flex;
-        justify-content: center;
-        z-index: 100;
-
-        .left, .right {
-            min-width: 6rem;
-        }
-
-        .left {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            button {
-                margin-left: 2rem;
-            }
-        }
-
-        .middle {
-            flex-grow: 1;
-            display: flex;
-            justify-content: center;
-            background-color: #fafafa;
-        }
-
-        .right {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            button {
-                margin-right: 2rem;
-            }
-        }
+        height: 64px;
+        align-items: center;
+      }
     }
 
-    .content {
-        flex-grow: 1;
-        padding: 0 2rem;
-
-        .loading {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    .right {
+      display: flex;
+      justify-content: right;
+      align-items: center;
     }
+  }
+
+  .content {
+    flex-grow: 1;
+    margin-top: 64px;
+    padding: 40px;
+
+    .loading {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  .bottom-bar {
+    text-align: center;
+  }
 }
-
-

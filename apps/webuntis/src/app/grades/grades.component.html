@@ -5,7 +5,9 @@
       <mat-card-subtitle>All subjects</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-      <div class="mark" [style.color]="this.averageMark | colorMark">{{ this.averageMark | number: '1.0-2' }}</div>
+      <div class="mark" [style.color]="this.averageMark | colorMark">
+        {{ this.averageMark | number: '1.0-2' }}
+      </div>
     </mat-card-content>
   </mat-card>
   <mat-card>
@@ -13,48 +15,85 @@
       <mat-card-title>Mark Ratio</mat-card-title>
       <mat-card-subtitle>Positive/Negative</mat-card-subtitle>
     </mat-card-header>
-    <mat-card-content><span style="color: rgb(0, 94, 0);">{{ this.positiveMarks }}</span> / <span style="color: rgb(173, 0, 0);">{{ this.negativeMarks }}</span></mat-card-content>
+    <mat-card-content
+      ><span style="color: rgb(0, 94, 0)">{{ this.positiveMarks }}</span> /
+      <span style="color: rgb(173, 0, 0)">{{
+        this.negativeMarks
+      }}</span></mat-card-content
+    >
   </mat-card>
 </div>
 
-<div *ngIf="mobile; then mobileView else desktopView"></div>
+<div *ngIf="mobile; then mobileView; else desktopView"></div>
 <ng-template #desktopView>
-  <div class="mat-elevation-z8 grade-table">
-    <mat-table #table [dataSource]="dataSource">
+  <mat-card>
+    <div class="grade-table">
+      <mat-table #table [dataSource]="dataSource">
+        <ng-container matColumnDef="subject">
+          <mat-header-cell
+            class="matColumnSubject"
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            Subject
+          </mat-header-cell>
+          <mat-cell class="matColumn" *matCellDef="let element">
+            {{ element.lesson.subjects }}
+          </mat-cell>
+        </ng-container>
 
-      <ng-container matColumnDef="subject">
-        <mat-header-cell class="matColumnSubject" *matHeaderCellDef mat-sort-header> Subject </mat-header-cell>
-        <mat-cell class="matColumn" *matCellDef="let element"> {{element.lesson.subjects}} </mat-cell>
-      </ng-container>
-  
-      <ng-container *ngFor="let n of gradeArray" matColumnDef="{{n}}">
-        <mat-header-cell class="matColumnGrades" *matHeaderCellDef></mat-header-cell>
-        
-        <mat-cell class="matColumnGrades" *matCellDef="let element" [matTooltip]="(convertToDate(element.gradesWithMarks[n]?.date) | date) || ''"> {{element.gradesWithMarks[n]?.mark.name }} </mat-cell>
-      </ng-container>
-  
-      <ng-container matColumnDef="average">
-        <mat-header-cell class="matColumnAverage" *matHeaderCellDef> Average </mat-header-cell>
-        <mat-cell class="matColumn" *matCellDef="let element" [style.color]="element.averageMark | colorMark"> {{ ((element.averageMark || '') | number: '0.0-1') || '/' }} </mat-cell>
-      </ng-container>
-  
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="redirectToSubject(row?.lesson?.id)"></mat-row>
-    
-    </mat-table>
-  </div>
+        <ng-container *ngFor="let n of gradeArray" matColumnDef="{{ n }}">
+          <mat-header-cell
+            class="matColumnGrades"
+            *matHeaderCellDef
+          ></mat-header-cell>
+
+          <mat-cell
+            class="matColumnGrades"
+            *matCellDef="let element"
+            [matTooltip]="
+              (convertToDate(element.gradesWithMarks[n]?.date) | date) || ''
+            "
+          >
+            {{ element.gradesWithMarks[n]?.mark.name }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="average">
+          <mat-header-cell class="matColumnAverage" *matHeaderCellDef>
+            Average
+          </mat-header-cell>
+          <mat-cell
+            class="matColumn"
+            *matCellDef="let element"
+            [style.color]="element.averageMark | colorMark"
+          >
+            {{ (element.averageMark || '' | number: '0.0-1') || '/' }}
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          (click)="redirectToSubject(row?.lesson?.id)"
+        ></mat-row>
+      </mat-table>
+    </div>
+  </mat-card>
 </ng-template>
-
 
 <ng-template #mobileView>
   <mat-accordion class="grade-accordion" multi>
-    <mat-expansion-panel *ngFor="let item of dataSource.connect() | async;" [disabled]="item.grades.length===0">
+    <mat-expansion-panel
+      *ngFor="let item of dataSource.connect() | async"
+      [disabled]="item.grades.length === 0"
+    >
       <mat-expansion-panel-header>
         <mat-panel-title>
           {{ item.lesson.subjects }}
         </mat-panel-title>
         <mat-panel-description [style.color]="item.averageMark | colorMark">
-          {{ ((item.averageMark || '') | number: '0.0-1') || '' }}
+          {{ (item.averageMark || '' | number: '0.0-1') || '' }}
           <!-- <mat-icon>account_circle</mat-icon> -->
         </mat-panel-description>
       </mat-expansion-panel-header>
@@ -62,15 +101,21 @@
         <div *ngFor="let grade of item.grades">
           <mat-divider></mat-divider>
           <div class="grade-row">
-            <span>{{ webUntis.convertDate(grade.date.toString()) | date }}</span>
+            <span>{{
+              webUntis.convertDate(grade.date.toString()) | date
+            }}</span>
             <span>{{ grade.mark.name }}</span>
           </div>
         </div>
         <div class="btn-row">
-          <button mat-stroked-button (click)="redirectToSubject(item.lesson.id)">Analytics</button>
+          <button
+            mat-stroked-button
+            (click)="redirectToSubject(item.lesson.id)"
+          >
+            Analytics
+          </button>
         </div>
       </div>
     </mat-expansion-panel>
-  
   </mat-accordion>
 </ng-template>

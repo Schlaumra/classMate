@@ -1,0 +1,5 @@
+@use "../app/app.component-theme.scss" as app;
+
+@mixin theme($theme, $typography-config, $variants) {
+    @include app.theme($theme, $typography-config);
+}

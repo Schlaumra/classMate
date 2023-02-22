@@ -1,18 +1,17 @@
-export const jsonRpcVersion = '2.0'
+export const jsonRpcVersion = '2.0';
 
 export enum Method {
   AUTH = 'authenticate',
   LOGOUT = 'logout',
   GETCURRENTSCHOOLYEAR = 'getCurrentSchoolyear',
   GETSCHOOLYEARS = 'getSchoolyears',
-  GETSUBJECTS = 'getSubjects'
+  GETSUBJECTS = 'getSubjects',
 }
 
 export enum PersonType {
   TEACHER = 2,
-  STUDENT = 5
+  STUDENT = 5,
 }
-
 
 export interface dto {
   id: number;
@@ -29,18 +28,18 @@ export interface dtoResponse {
 }
 
 export class DtoError extends Error {
-  public code: number
+  public code: number;
 
   constructor(code: number, message: string) {
-    super(message)
-    this.code = code
+    super(message);
+    this.code = code;
   }
 }
 
 export class BadCredentials extends DtoError {
-  static ErrCode = -8504
+  static ErrCode = -8504;
   constructor() {
-    super(BadCredentials.ErrCode, "Bad Credentials")
+    super(BadCredentials.ErrCode, 'Bad Credentials');
   }
 }
 
@@ -49,7 +48,7 @@ export interface LoginDto extends dto {
     user: string;
     password: string;
     client: string;
-  }
+  };
 }
 
 export interface LoginDtoResponse extends dtoResponse {
@@ -58,25 +57,25 @@ export interface LoginDtoResponse extends dtoResponse {
     personId: number;
     personType: PersonType;
     sessionId: string;
-  }
+  };
   error: {
-    code: number,
-    message: string
-  }
+    code: number;
+    message: string;
+  };
 }
 
 export interface Subject {
-  id: number,
-  name: string,
-  alternateName: string,
-  longName: string,
-  foreColor: string,
-  backColor: string,
-  active: boolean,
+  id: number;
+  name: string;
+  alternateName: string;
+  longName: string;
+  foreColor: string;
+  backColor: string;
+  active: boolean;
 }
 
 export interface GetSubjectsDtoResponse extends dtoResponse {
-  result: Subject[]
+  result: Subject[];
 }
 
 export interface SchoolYear {
@@ -87,46 +86,46 @@ export interface SchoolYear {
 }
 
 export interface GetCurrentSchoolYearDtoResponse extends dtoResponse {
-  result: SchoolYear
+  result: SchoolYear;
 }
 
 export interface GetSchoolYearsDtoResponse extends dtoResponse {
-  result: SchoolYear[]
+  result: SchoolYear[];
 }
 
 export interface Lesson {
-  id: number,
-  klassen: string,
-  subjects: string,
-  teachers: string,
-  text: string
+  id: number;
+  klassen: string;
+  subjects: string;
+  teachers: string;
+  text: string;
 }
 
 export interface Mark {
-  id: number,
-  markDisplayValue: number,
-  markSchemaId: number,
-  markValue: number,
-  name: string
+  id: number;
+  markDisplayValue: number;
+  markSchemaId: number;
+  markValue: number;
+  name: string;
 }
 
 export interface Grade {
-  date: number,
-  examId: number,
+  date: number;
+  examId: number;
   examType: {
-    id: number,
-    longname: string,
-    markSchemaId: number,
-    name: string,
-    weightFactor: number
-  }
-  examTypeId: number,
-  id: number,
-  lastUpdate: number
-  mark: Mark
-  markSchemaId: number,
-  schoolyearId: number,
-  text: string
+    id: number;
+    longname: string;
+    markSchemaId: number;
+    name: string;
+    weightFactor: number;
+  };
+  examTypeId: number;
+  id: number;
+  lastUpdate: number;
+  mark: Mark;
+  markSchemaId: number;
+  schoolyearId: number;
+  text: string;
 }
 
 export interface GradeCollectionBySubject {
@@ -139,18 +138,18 @@ export interface GradeCollectionBySubject {
 }
 
 export interface Person {
-  displayName: string,
-  id: number,
-  imageUrl: string
+  displayName: string;
+  id: number;
+  imageUrl: string;
 }
 
 export interface DataSubject {
   user: {
-    id: number,
-    locale: string,
-    name: string,
-    person: Person,
-    roles: string[],
-    students: Person[] // TODO: Switch between student
-  }
+    id: number;
+    locale: string;
+    name: string;
+    person: Person;
+    roles: string[];
+    students: Person[];
+  };
 }

@@ -11,7 +11,6 @@ import {
   finalize,
   shareReplay,
   filter,
-  catchError,
 } from 'rxjs';
 import {
   DataSubject,
@@ -33,26 +32,7 @@ import {
 import { CookieService } from 'ngx-cookie-service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Router } from '@angular/router';
-
-interface jwtToken {
-  tenant_id: string; // "1243800"
-  sub: string; // "Amh-Rap"
-  roles: string; // "STUDENT"
-  iss: string; // "webuntis"
-  locale: string; // "de"
-  sc: string; // "it"
-  user_type: string; // "USER"
-  user_id: number; // 949
-  host: string; // "mese.webuntis.com"
-  sn: string; // "lbs-brixen"
-  scopes: string; // "mg:r"
-  exp: number; // 1672911732
-  per: string[]; // ["mg:r"]
-  iat: number; // 1672910832
-  username: string; // "Amh-Rap"
-  sr: string; // "IT-32"
-  person_id: 770;
-}
+import { withCache } from '@ngneat/cashew';
 
 @Injectable({
   providedIn: 'root',
@@ -97,7 +77,6 @@ export class WebuntisService {
     if (student) {
       return JSON.parse(student);
     }
-    console.log(student);
     throw Error('Not logged in as a User');
   }
 
@@ -131,25 +110,37 @@ export class WebuntisService {
   };
   data!: DataSubject;
 
-  postJsonRpcApi<T>(method: Method, params: object = {}) {
+  postJsonRpcApi<T>(
+    method: Method,
+    params: object = {},
+    caching: boolean | string = false
+  ) {
     const body: dto = {
       id: 1,
       method: method,
       params: params,
       jsonrpc: this.apiDefinition.jsonRpcVersion,
     };
+    const cache =
+      caching.toString() != 'true' ? { key: caching.toString() } : {};
+
     return this.http.post<T>(
       `${this.apiDefinition.jsonRpcUrl}?school=${this.school}`,
-      body
+      body,
+      { context: caching ? withCache(cache) : undefined }
     );
   }
 
   getApi<T>(
     path: string,
-    headers?: HttpHeaders | { [header: string]: string | string[] } | undefined
+    headers?: HttpHeaders | { [header: string]: string | string[] } | undefined,
+    caching?: boolean
   ) {
     return this.http
-      .get<T>(this.apiDefinition.baseUrl + path, { headers: headers })
+      .get<T>(this.apiDefinition.baseUrl + path, {
+        headers: headers,
+        context: caching ? withCache() : undefined,
+      })
       .pipe(
         tap(() => {
           if (!this.jwtHelper.tokenGetter()) {
@@ -198,15 +189,13 @@ export class WebuntisService {
     }).pipe(
       tap((jsonRpcAuth) => {
         if (jsonRpcAuth.error) {
-          const error = jsonRpcAuth.error
+          const error = jsonRpcAuth.error;
           if (error.code == BadCredentials.ErrCode) {
-            throw new BadCredentials()
+            throw new BadCredentials();
+          } else {
+            throw Error(`(${error.code}): ${error.message}`);
           }
-          else {
-            throw Error(`(${error.code}): ${error.message}`)
-          }
-        }
-        else {
+        } else {
           this.subject = jsonRpcAuth.result;
           this.sessionId = this.subject.sessionId;
         }
@@ -222,8 +211,9 @@ export class WebuntisService {
     return Boolean(this.jwtHelper.tokenGetter());
   }
 
-  logout(router: Router): Observable<any> {
+  logout(router: Router): Observable<undefined> {
     return this.postJsonRpcApi(Method.LOGOUT).pipe(
+      map(() => undefined),
       finalize(() => {
         this.cookieService.deleteAll();
         localStorage.clear();
@@ -233,20 +223,24 @@ export class WebuntisService {
   }
 
   getSubjects(): Observable<Subject[]> {
-    return this.postJsonRpcApi<GetSubjectsDtoResponse>(Method.GETSUBJECTS).pipe(
-      map(value => value.result)
-    )
+    return this.postJsonRpcApi<GetSubjectsDtoResponse>(
+      Method.GETSUBJECTS,
+      undefined,
+      'getSubjects'
+    ).pipe(map((value) => value.result));
   }
 
   getSubject(name: string): Observable<Subject | undefined> {
     return this.getSubjects().pipe(
-      map(value => value.find(val => val.name == name))
-    )
+      map((value) => value.find((val) => val.name == name))
+    );
   }
 
   getLessons(): Observable<Lesson> {
     return this.getApi<{ data: { lessons: Lesson[] } }>(
-      `classreg/grade/grading/list?studentId=${this.student.id}&schoolyearId=${this.currentYear?.id}`
+      `classreg/grade/grading/list?studentId=${this.student.id}&schoolyearId=${this.currentYear?.id}`,
+      undefined,
+      true
     ).pipe(mergeMap((value) => from(value.data.lessons)));
   }
 
@@ -256,25 +250,38 @@ export class WebuntisService {
 
   getCurrentSchoolYear(): Observable<GetCurrentSchoolYearDtoResponse> {
     return this.postJsonRpcApi<GetCurrentSchoolYearDtoResponse>(
-      Method.GETCURRENTSCHOOLYEAR
+      Method.GETCURRENTSCHOOLYEAR,
+      undefined,
+      'getCurrentSchoolYear'
     );
   }
 
   getSubjectGrades(lessonId: number): Observable<GradeCollectionBySubject> {
     return this.getApi<{ data: GradeCollectionBySubject }>(
-      `classreg/grade/grading/lesson?studentId=${this.student.id}&lessonId=${lessonId}`
+      `classreg/grade/grading/lesson?studentId=${this.student.id}&lessonId=${lessonId}`,
+      undefined,
+      true
     ).pipe(
-      filter(data => data.data.lesson.subjects != ''),
+      filter((data) => data.data.lesson.subjects != ''),
       map((data) => {
         const res = data.data;
         res.gradesWithMarks = res.grades.filter(
           (value: Grade) => value.mark.markValue != 0
         );
         if (res.gradesWithMarks.length > 0) {
-          res.positiveMarks = res.gradesWithMarks.filter((value: Grade) => value.mark.markDisplayValue >= 6).length
-          res.negativeMarks = res.gradesWithMarks.filter((value: Grade) => value.mark.markDisplayValue < 6).length
+          res.positiveMarks = res.gradesWithMarks.filter(
+            (value: Grade) => value.mark.markDisplayValue >= 6
+          ).length;
+          res.negativeMarks = res.gradesWithMarks.filter(
+            (value: Grade) => value.mark.markDisplayValue < 6
+          ).length;
           res.averageMark =
-            res.gradesWithMarks.reduce((sum, current) => (sum += current.mark.markValue), 0) / res.gradesWithMarks.length / 100;
+            res.gradesWithMarks.reduce(
+              (sum, current) => (sum += current.mark.markValue),
+              0
+            ) /
+            res.gradesWithMarks.length /
+            100;
         } else {
           res.averageMark = 0;
         }

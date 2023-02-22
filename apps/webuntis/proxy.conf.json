@@ -1,7 +1,7 @@
 {
   "/api": {
     "target": "https://mese.webuntis.com/",
-    "pathRewrite": {"^/api" : ""},
+    "pathRewrite": { "^/api": "" },
     "secure": false,
     "changeOrigin": true
   }

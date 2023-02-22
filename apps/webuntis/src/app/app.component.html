@@ -1,32 +1,51 @@
 <div class="page">
   <div class="top-bar">
-    <div class="left">
-      <button *ngIf="backExists()" type="button" color="primary" mat-icon-button matSuffix (click)="back()">
-        <mat-icon>arrow_back</mat-icon>
-      </button>
-    </div>
-    <div class="middle">
-      <img src="../../assets/geekUntisLogo.svg" alt="geekUntis" width="120rem" (click)="backToHome()">
-    </div>
-    <div class="right">
-      <button *ngIf="isLoggedIn()" type="button" color="primary" mat-fab matSuffix (click)="logout()">
-        <mat-icon>logout</mat-icon>
-      </button>
-    </div>
+    <mat-toolbar color="primary">
+      <div class="left">
+        <button
+          class="material-symbols-rounded"
+          *ngIf="backExists()"
+          mat-icon-button
+          matSuffix
+          (click)="back()"
+        >
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+      </div>
+      <div class="middle">
+        <div class="logo" (click)="backToHome()">
+          <img
+            src="../../assets/geekUntisLogo.svg"
+            alt="geekUntis"
+            height="20px"
+          />
+        </div>
+      </div>
+      <div class="right">
+        <button
+          class="material-symbols-rounded"
+          *ngIf="isLoggedIn()"
+          mat-icon-button
+          matSuffix
+          (click)="logout()"
+        >
+          <mat-icon>logout</mat-icon>
+        </button>
+      </div>
+    </mat-toolbar>
   </div>
-  
-  <div class="content">
+
+  <div class="content mat-typography">
     <span [hidden]="contentIsLoading">
-      <router-outlet ></router-outlet>
+      <router-outlet></router-outlet>
     </span>
     <div class="loading" *ngIf="contentIsLoading">
       <mat-spinner></mat-spinner>
     </div>
   </div>
-  
+
   <div class="bottom-bar">
-    <div style="margin: 1rem; text-align: end;">
-      Made by @Schlaumra
-    </div>
+    <mat-divider></mat-divider>
+    <span class="mat-small">Made by @Schlaumra</span>
   </div>
 </div>

@@ -1,0 +1,23 @@
+@use 'SASS:map';
+@use '@angular/material' as mat;
+
+
+@mixin color($theme, $color-config) {
+  $primary-palette: map.get($color-config, 'primary');
+  $background: map.get($color-config, 'background');
+
+  body {
+    background-color: map.get($background, 'background');
+   }
+}
+
+@mixin theme($theme, $typography-config) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme, $color-config);
+  }
+
+  // @if $typography-config != null {
+  //   @include typography($typography-config);
+  // }
+}

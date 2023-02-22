@@ -2,8 +2,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 2rem;
-  margin: 2rem 0;
-
+  margin: 0 0 2rem 0;
 
   .mat-mdc-card {
     flex-grow: 1;
@@ -14,22 +13,13 @@
       font-weight: 600;
       font-size: 2rem;
     }
-
   }
 }
 
 .grade-table {
-  margin: 2rem 0;
-
   .matColumnGrades {
-    // border-right: .05rem solid rgba(0, 0, 0, 0.1);
-    // max-width: 8rem;
     min-width: 4rem;
     justify-content: center;
-  }
-
-  .matColumn {
-      // flex-grow: 2;
   }
 
   .mat-mdc-row:hover {
@@ -38,24 +28,21 @@
 
   .cdk-column-average {
     max-width: 10rem;
-    border-left: .05rem solid black;
+    border-left: 0.05rem solid black;
     justify-content: center;
   }
 
   .cdk-column-subject {
-    border-right: .05rem solid black;
+    border-right: 0.05rem solid black;
     max-width: 20rem;
   }
 }
-
 
 .grade-accordion {
   display: block;
 
   .item-body {
-    
     .grade-row {
-
       display: flex;
       justify-content: space-between;
       padding: 1rem 0.5rem;

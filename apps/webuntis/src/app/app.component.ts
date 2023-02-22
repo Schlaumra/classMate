@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { WebuntisService } from './webuntis/webuntis.service';
-import { LoadingService } from './loading/loading.service'
+import { LoadingService } from './loading/loading.service';
 
 @Component({
   selector: 'webuntis-root',
@@ -9,30 +9,39 @@ import { LoadingService } from './loading/loading.service'
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+  contentIsLoading = true;
 
-  contentIsLoading = true
-
-  constructor(private webUntis: WebuntisService, private router: Router, private activatedRoute: ActivatedRoute, private loading: LoadingService) {
-    this.loading.isLoading$.subscribe(isLoading => this.contentIsLoading = isLoading)
+  constructor(
+    private webUntis: WebuntisService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private loading: LoadingService
+  ) {
+    this.loading.isLoading$.subscribe(
+      (isLoading) => (this.contentIsLoading = isLoading)
+    );
   }
 
   logout() {
-    this.webUntis.logout(this.router).subscribe()
+    this.webUntis.logout(this.router).subscribe();
   }
 
   isLoggedIn(): boolean {
-    return this.webUntis.isLoggedIn()
+    return this.webUntis.isLoggedIn();
   }
 
   backExists(): boolean {
-    return this.activatedRoute.firstChild?.snapshot.routeConfig?.path === 'subject' ? true : false
+    return this.activatedRoute.firstChild?.snapshot.routeConfig?.path ===
+      'subject'
+      ? true
+      : false;
   }
 
   back() {
-    this.router.navigate(['grades'])
+    this.router.navigate(['grades']);
   }
 
   backToHome() {
-    this.router.navigate([''])
+    this.router.navigate(['']);
   }
 }
