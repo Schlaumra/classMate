@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "npmScope": "webuntis",
+  "npmScope": "classmate",
   "affected": {
     "defaultBase": "main"
   },
@@ -45,7 +45,7 @@
       "style": "scss"
     }
   },
-  "defaultProject": "webuntis",
+  "defaultProject": "classmate",
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "sharedGlobals": [],

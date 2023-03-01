@@ -1,0 +1,49 @@
+<div class="page">
+  <div class="top-bar">
+    <mat-toolbar color="primary">
+      <div class="left">
+        <button
+          class="material-symbols-rounded"
+          *ngIf="backExists()"
+          mat-icon-button
+          matSuffix
+          (click)="back()"
+        >
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+      </div>
+      <div class="middle">
+        <div class="logo" (click)="backToHome()">
+          <img
+            src="../../assets/classMateLogo.svg"
+            alt="classMate"
+            height="20px"
+          />
+        </div>
+      </div>
+      <div class="right">
+        <button
+          class="material-symbols-rounded"
+          *ngIf="isLoggedIn()"
+          mat-icon-button
+          matSuffix
+          (click)="logout()"
+        >
+          <mat-icon>logout</mat-icon>
+        </button>
+      </div>
+    </mat-toolbar>
+  </div>
+
+  <div class="content mat-typography">
+    <span [hidden]="loading.isLoading$| async">
+      <router-outlet></router-outlet>
+    </span>
+    <div class="loading" *ngIf="loading.isLoading$ | async">
+      <mat-spinner ></mat-spinner>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+  </div>
+</div>

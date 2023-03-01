@@ -1,0 +1,15 @@
+.login-component {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  .login-box {
+    padding: 0 40px 50px 40px;
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}

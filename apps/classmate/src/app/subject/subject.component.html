@@ -1,0 +1,61 @@
+<div class="mat-headline-4 subject-header">
+  {{ (subjectInfo | async)?.longName || (subject | async)?.lesson?.subjects }}
+</div>
+<div class="card-overview">
+  <mat-card class="avg-mark">
+    <mat-card-header>
+      <mat-card-title i18n>Average Mark</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div
+        class="mark"
+        [style.color]="(subject | async)?.averageMark | colorMark"
+      >
+      <span [class]="(subject | async)?.averageMark | colorMark">{{ (subject | async)?.averageMark | number: '1.0-2' }}</span>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title i18n>Mark Ratio</mat-card-title>
+      <mat-card-subtitle i18n>Positive/Negative</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content
+      ><span class="focus-ok">{{
+        (subject | async)?.positiveMarks
+      }}</span>
+      &nbsp;/&nbsp;
+      <span class="focus-attention">{{
+        (subject | async)?.negativeMarks
+      }}</span></mat-card-content
+    >
+  </mat-card>
+</div>
+
+<mat-card class="chart-card">
+  <mat-card-header>
+    <mat-card-title i18n>Trend</mat-card-title>
+    <mat-card-subtitle i18n>Grade performance</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="chart-container">
+      <ngx-charts-line-chart
+        #gradeChart
+        [scheme]="colorScheme"
+        [legend]="false"
+        [showXAxisLabel]="false"
+        [showYAxisLabel]="false"
+        [xAxis]="true"
+        [yAxis]="true"
+        [xAxisTicks]="[]"
+        [yAxisTicks]="[4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10]"
+        [yScaleMax]="yAxisMax"
+        [yScaleMin]="yAxisMin"
+        [xAxisLabel]="'Index'"
+        [yAxisLabel]="'Grade'"
+        [results]="data"
+      >
+      </ngx-charts-line-chart>
+    </div>
+  </mat-card-content>
+</mat-card>
