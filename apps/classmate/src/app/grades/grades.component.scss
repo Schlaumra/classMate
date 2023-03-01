@@ -1,0 +1,45 @@
+$border-thick: 1px;
+$border-color: #000000;
+$hover-color: rgba($color: #000000, $alpha: 0.05);
+
+.grade-table {
+  .matColumnGrades {
+    padding: 0 10px;
+    justify-content: center;
+  }
+
+  .mat-mdc-row:hover {
+    background-color: $hover-color;
+  }
+
+  .cdk-column-average {
+    max-width: 110px;
+    border-left: $border-thick solid $border-color;
+    justify-content: center;
+    font-weight: bold;
+  }
+
+  .cdk-column-subject {
+    border-right: $border-thick solid $border-color;
+  }
+}
+
+.grade-accordion {
+
+  .mat-expansion-panel-header-description {
+    justify-content: right;
+  }
+
+  .item-body {
+    .grade-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px 20px;
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: right;
+    }
+  }
+}

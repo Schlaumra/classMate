@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="5304185281800275770" datatype="html">
+        <source>Average Mark</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/classmate/src/app/grades/grades.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/classmate/src/app/subject/subject.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6416928151553693288" datatype="html">
+        <source>All subjects</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/classmate/src/app/grades/grades.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/classmate/src/app/subject/subject.component.html</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1414360806607714684" datatype="html">
+        <source>Mark Ratio</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/classmate/src/app/grades/grades.component.html</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/classmate/src/app/subject/subject.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1015967963486489965" datatype="html">
+        <source>Positive/Negative</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/classmate/src/app/grades/grades.component.html</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/classmate/src/app/subject/subject.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5824724870331417188" datatype="html">
+        <source> Subject </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/classmate/src/app/grades/grades.component.html</context>
+          <context context-type="linenumber">39,40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4582960895311066471" datatype="html">
+        <source> Average </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/classmate/src/app/grades/grades.component.html</context>
+          <context context-type="linenumber">65,66</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7715848895573190774" datatype="html">
+        <source> Analytics </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/classmate/src/app/grades/grades.component.html</context>
+          <context context-type="linenumber">114,115</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5248717555542428023" datatype="html">
+        <source>Username</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/classmate/src/app/login/login.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2433183576154622462" datatype="html">
+        <source>Ex. max-mus</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/classmate/src/app/login/login.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1431416938026210429" datatype="html">
+        <source>Password</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/classmate/src/app/login/login.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1908285951500318953" datatype="html">
+        <source> Login </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/classmate/src/app/login/login.component.html</context>
+          <context context-type="linenumber">46,48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7079029906993509129" datatype="html">
+        <source>Trend</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/classmate/src/app/subject/subject.component.html</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5960813676715791037" datatype="html">
+        <source>Grade performance</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/classmate/src/app/subject/subject.component.html</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

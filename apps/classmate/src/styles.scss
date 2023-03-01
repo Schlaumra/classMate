@@ -1,0 +1,82 @@
+@use '@angular/material' as mat;
+@use './theme';
+@use './theme/colors.scss' as col;
+
+@include mat.core();
+
+
+$my-typography: mat.define-typography-config(
+  $font-family: 'Roboto',
+);
+
+$my-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: mat.define-palette(col.$my-primary),
+      accent: mat.define-palette(col.$my-accent),
+    ),
+    typography: $my-typography,
+    density: 0,
+  )
+);
+
+@include mat.core-theme($my-theme);
+@include mat.button-theme($my-theme);
+@include mat.input-theme($my-theme);
+@include mat.icon-theme($my-theme);
+@include mat.toolbar-theme($my-theme);
+@include mat.progress-spinner-theme($my-theme);
+@include mat.divider-theme($my-theme);
+@include mat.card-theme($my-theme);
+@include mat.table-theme($my-theme);
+@include mat.snack-bar-theme($my-theme);
+@include mat.tooltip-theme($my-theme);
+@include mat.expansion-theme($my-theme);
+@include mat.form-field-theme($my-theme);
+@include theme.theme(
+  $my-theme,
+  $my-typography,
+);
+
+@include mat.typography-hierarchy($my-theme);
+
+
+
+// Focus Colors
+
+.focus-ok {
+  color: mat.get-color-from-palette(col.$my-success, 800);
+}
+
+.focus-warn {
+  color: mat.get-color-from-palette(col.$my-warn, 900);
+}
+
+.focus-attention {
+  color: mat.get-color-from-palette(col.$my-attention, 800);
+}
+
+
+// Card Container
+
+$gap: 30px;
+
+.card-overview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $gap;
+  margin: 0 0 $gap 0;
+
+  .mat-mdc-card {
+    flex-grow: 1;
+
+    .mat-mdc-card-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100px;
+      font-weight: 600;
+      font-size: 2rem;
+    }
+  }
+}
