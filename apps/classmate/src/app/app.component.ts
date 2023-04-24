@@ -17,7 +17,6 @@ export class AppComponent {
     protected loading: LoadingService
   ) {
   }
-
   logout() {
     this.loading.setLoading(true)
     this.webUntis.logout().subscribe();
@@ -42,13 +41,38 @@ export class AppComponent {
     this.router.navigate(['']);
   }
 
-  getUser(): Person | null {
+  getUsers(): Person[] | null{
     if (this.webUntis.isLoggedIn()) {
-      return this.webUntis.student;
+      return this.webUntis.students;
     }
     else {
       this.webUntis.logout()
       return null;
     }
+  }
+
+  getUsersExceptCurrent(): Person[] | null {
+    if (this.webUntis.isLoggedIn()) {
+      return this.webUntis.students.filter((value, index) => index != this.webUntis.currentStudent);
+    }
+    else {
+      this.webUntis.logout()
+      return null;
+    }
+  }
+
+  getCurrentUser(): Person | null {
+    if (this.webUntis.isLoggedIn()) {
+      return this.webUntis.students[this.webUntis.currentStudent];
+    }
+    else {
+      this.webUntis.logout()
+      return null;
+    }
+  }
+
+  setUser(user: Person) {
+    this.webUntis.currentStudent = this.getUsers()?.findIndex(element => element.id == user.id) || 0
+    window.location.reload()
   }
 }

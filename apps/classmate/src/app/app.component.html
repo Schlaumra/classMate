@@ -26,20 +26,28 @@
           class="material-symbols-rounded"
           mat-icon-button
           [matMenuTriggerFor]="menu"
-          aria-label="Example icon-button with a menu"
           *ngIf="isLoggedIn()"
         >
           <mat-icon>menu</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <div class="menu-name">
-            <mat-icon class="material-symbols-rounded">account_circle</mat-icon>
-            <span>{{ getUser()?.displayName }}</span>
+          <div class="menu-current-account">
+            <div class="avatar">
+              <img [src]="getCurrentUser()?.imageUrl || '../../assets/account.svg'">
+            </div>
+            <div>{{ getCurrentUser()?.displayName }}</div>
           </div>
           <mat-divider></mat-divider>
-
+          <div class="menu-account-selection">
+            <div *ngFor="let user of getUsersExceptCurrent()" class="user" (click)="setUser(user)">
+              <div class="avatar" style="width: 60px; height: 60px;">
+                <img [src]="user.imageUrl || '../../assets/account.svg'">
+              </div>
+              <div>{{ user.displayName }}</div>
+            </div>
+          </div>
           <mat-divider></mat-divider>
-          <button mat-menu-item (click)="logout()">
+          <button mat-menu-item (click)="logout()" class="logout">
             <mat-icon class="material-symbols-rounded">logout</mat-icon>
             <span>Logout</span>
           </button>

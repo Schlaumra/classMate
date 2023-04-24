@@ -54,6 +54,14 @@ export class WebuntisApiService {
     return localStorage.getItem('school') || '';
   }
 
+  set currentStudent(v: number) {
+    localStorage.setItem('currentStudent', String(v));
+  }
+
+  get currentStudent(): number {
+    return Number(localStorage.getItem('currentStudent')) || 0;
+  }
+
   set currentYear(v: SchoolYear | null) {
     localStorage.setItem('schoolYear', JSON.stringify(v));
   }
@@ -67,11 +75,11 @@ export class WebuntisApiService {
     }
   }
 
-  set student(v: Person) {
+  set students(v: Person[]) {
     localStorage.setItem('student', JSON.stringify(v));
   }
 
-  get student(): Person {
+  get students(): Person[] {
     const student = localStorage.getItem('student');
     if (student) {
       return JSON.parse(student);
@@ -153,9 +161,9 @@ export class WebuntisApiService {
       tap((loginData) => {
         const data: DataSubject = loginData;
         if (data.user.roles.includes('STUDENT')) {
-          this.student = data.user.person;
+          this.students = [data.user.person];
         } else {
-          this.student = data.user.students[0];
+          this.students = data.user.students;
         }
       })
     );
@@ -201,7 +209,7 @@ export class WebuntisApiService {
     let loggedIn = true
     try {
       loggedIn = loggedIn
-        && Boolean(this.student)
+        && Boolean(this.students.length)
         && Boolean(this.jwtHelper.tokenGetter())
         && Boolean(this.sessionId)
       return loggedIn
@@ -239,7 +247,7 @@ export class WebuntisApiService {
 
   getLessons(): Observable<Lesson> {
     return this.getApi<{ data: { lessons: Lesson[] } }>(
-      `classreg/grade/grading/list?studentId=${this.student.id}&schoolyearId=${this.currentYear?.id}`,
+      `classreg/grade/grading/list?studentId=${this.students[this.currentStudent].id}&schoolyearId=${this.currentYear?.id}`,
       undefined,
       true
     ).pipe(mergeMap((value) => from(value.data.lessons)));
@@ -259,7 +267,7 @@ export class WebuntisApiService {
 
   getSubjectGrades(lessonId: number): Observable<GradeCollectionBySubject> {
     return this.getApi<{ data: GradeCollectionBySubject }>(
-      `classreg/grade/grading/lesson?studentId=${this.student.id}&lessonId=${lessonId}`,
+      `classreg/grade/grading/lesson?studentId=${this.students[this.currentStudent].id}&lessonId=${lessonId}`,
       undefined,
       true
     ).pipe(

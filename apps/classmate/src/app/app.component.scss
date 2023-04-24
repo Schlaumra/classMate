@@ -74,9 +74,45 @@
   }
 }
 
-.menu-name {
+.menu-current-account {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   margin: 10px 0;
   padding: 10px;
-  gap: 10px;
+  gap: 20px;
+  font-weight: bold;
+}
+
+.menu-account-selection {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+
+  .user {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .user:hover {
+    background-color: rgba($color: #000000, $alpha: 0.1);
+  }
+}
+
+.avatar {
+  border-radius: 50%;
+  box-sizing: border-box;
+  display: inline-block;
+  height: 100px;
+  width: 100px;
+  overflow: hidden;
+
+  img {
+    display: block;
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+  }
 }
