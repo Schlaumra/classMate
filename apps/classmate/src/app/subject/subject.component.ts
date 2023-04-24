@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ChartComponent, Color, ScaleType } from '@swimlane/ngx-charts';
-import { GradeCollectionBySubject, Subject } from '@classmate/api-interfaces';
-import { Observable } from 'rxjs';
+import { GradeCollectionBySubject, Mark, Subject } from '@classmate/api-interfaces';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { WebuntisApiService } from '../webuntis/webuntisApi.service';
 import { LoadingService } from '../loading/loading.service';
 import { DatePipe } from '@angular/common';
+import { FormControl, Validators } from '@angular/forms';
 
 interface ChartData {
   name: string;
@@ -26,8 +27,19 @@ export class SubjectComponent implements OnInit {
   ) {
     this.contentLoading.setLoading(true);
   }
-  subject: Observable<GradeCollectionBySubject> | null = null;
-  subjectInfo: Observable<Subject | undefined> | null = null;
+  calculatorInput = new FormControl('', [
+    Validators.required,
+    Validators.max(10),
+    Validators.min(1)
+  ]);
+  calculatorAverage$ = new BehaviorSubject<number>(0)
+  calculatorAverage: Observable<number> = this.calculatorAverage$
+  calculatorGrades$ = new BehaviorSubject<number[]>([])
+  calculatorGrades: Observable<number[]> = this.calculatorGrades$
+  subject!: Observable<GradeCollectionBySubject>;
+  subjectInfo!: Observable<Subject | undefined>;
+
+  get calcGrades() {return this.calculatorGrades$.getValue()}
 
   @ViewChild('gradeChart') gradeChart!: ChartComponent;
 
@@ -54,8 +66,10 @@ export class SubjectComponent implements OnInit {
       if (id && typeof id === 'number') {
         this.subject = this.webuntis.getSubjectGrades(id);
         this.subject.subscribe((value) => {
+          this.calculatorGrades$.next(value.gradesWithMarks.map(value => value.mark.markValue / 100))
           this.subjectInfo = this.webuntis.getSubject(value.lesson.subjects);
           this.data[0].name = value.lesson.subjects;
+          this.calculatorAverage$.next(value.averageMark)
           value.grades.forEach((grade, i) => {
             if (grade.mark.markDisplayValue != 0) {
               this.data[0]['series'].push({
@@ -71,5 +85,21 @@ export class SubjectComponent implements OnInit {
         });
       }
     });
+  }
+
+  calculateNewAverage() {
+    this.calculatorAverage$.next(this.calcGrades.reduce((prev, cur) => prev + cur) / this.calcGrades.length)
+  }
+
+  addNewGrade() {
+    if (this.calculatorInput.valid && this.calculatorInput.value) {
+      this.calcGrades.push(Number(this.calculatorInput.value))
+    }
+    this.calculateNewAverage()
+  }
+
+  deleteLastGrade() {
+    this.calcGrades.pop()
+    this.calculateNewAverage()
   }
 }

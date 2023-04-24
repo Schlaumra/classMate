@@ -2,7 +2,7 @@ import { DataSource } from '@angular/cdk/collections';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { GradeCollectionBySubject } from '@classmate/api-interfaces';
+import { Grade, GradeCollectionBySubject } from '@classmate/api-interfaces';
 import { Observable, ReplaySubject, Subject, takeUntil, toArray } from 'rxjs';
 import { LoadingService } from '../loading/loading.service';
 import { WebuntisApiService } from '../webuntis/webuntisApi.service';
@@ -41,6 +41,7 @@ export class GradesComponent implements OnInit, OnDestroy {
   negativeMarks = 0;
   positiveMarks = 0;
   gradeArray = Array.from({ length: 10 }, (e, i) => i);
+  allGrades: {lesson: string, mark: Grade}[] = []
 
   constructor(
     protected webuntis: WebuntisApiService,
@@ -71,23 +72,23 @@ export class GradesComponent implements OnInit, OnDestroy {
           a.lesson.subjects.localeCompare(b.lesson.subjects)
         );
         gradesPerSubject.forEach((subject) => {
+          subject.gradesWithMarks.forEach((grade) => {
+            this.allGrades.push({ lesson: subject.lesson.subjects, mark: grade})
+          })
+          this.allGrades.sort((a, b) => a.mark.lastUpdate - b.mark.lastUpdate) // Sort by Date
+
           const len = subject.gradesWithMarks.length;
           this.maxGradeLength =
             len > this.maxGradeLength ? len : this.maxGradeLength;
 
           this.negativeMarks += subject.negativeMarks || 0;
           this.positiveMarks += subject.positiveMarks || 0;
-
-          if (subject.averageMark > 0) {
-            this.averageMark += subject.averageMark;
-            this.sumGrades += 1;
-          }
         });
         for (let i = 0; i < this.maxGradeLength; i++) {
           this.displayedColumns.push(i.toString());
         }
         this.displayedColumns.push('average');
-        this.averageMark = this.averageMark / this.sumGrades;
+        this.averageMark = this.allGrades.reduce((accumulator, current) => accumulator + current.mark.mark.markValue, 0) / this.allGrades.length / 100
         this.dataSource.update(gradesPerSubject);
         this.contentLoading.setLoading(false);
       });

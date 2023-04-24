@@ -30,8 +30,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private webUntis: WebuntisApiService,
     private formBuilder: FormBuilder,
-    private router: Router,
     private contentLoading: LoadingService,
+    private router: Router,
     private snackBar: MatSnackBar
   ) {}
   ngOnInit(): void {
@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
     if (this.webUntis.isLoggedIn()) {
       this.router.navigate(['grades']);
     }
-    this.webUntis.logout(this.router);
+    this.webUntis.logout();
     this.contentLoading.setLoading(false);
   }
 
@@ -55,13 +55,13 @@ export class LoginComponent implements OnInit {
             console.log('Error: ', error);
             this.contentLoading.setLoading(false);
             if (error instanceof BadCredentials) {
-              this.snackBar.open('Wrong Username or Password', 'Try again', {
+              this.snackBar.open($localize`Wrong Username or Password`, $localize`Try again`, {
                 duration: 5 * 1000,
               });
             } else {
               this.snackBar.open(
-                'An unexpected Error happened',
-                'Try again later'
+                $localize`An unexpected Error happened`,
+                $localize`Try again later`
               );
             }
             return of();

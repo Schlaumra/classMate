@@ -22,6 +22,29 @@
       <span class="focus-attention">{{ this.negativeMarks }}</span>
     </mat-card-content>
   </mat-card>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title i18n>Recently added Marks</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="recent-marks">
+        <div *ngFor="let grade of allGrades.slice(-3)" class="grade-row">
+          <mat-divider></mat-divider>
+          <div class="grade-line">
+            <span class="subject">
+              {{grade.lesson}}
+            </span>
+            <span
+            [class]="grade.mark.mark.markDisplayValue | colorMark: true"
+          >{{ grade.mark.mark.name }}</span>
+            <span>{{
+              convertToDate(grade.mark.date.toString()) | date
+            }}</span>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>
 
 <div *ngIf="mobile; then mobileView; else desktopView"></div>
@@ -33,7 +56,6 @@
           <mat-header-cell
             class="matColumnSubject"
             *matHeaderCellDef
-            mat-sort-header
             i18n
           >
             Subject
@@ -52,6 +74,7 @@
           <mat-cell
             class="matColumnGrades"
             *matCellDef="let element"
+            [class]="element.gradesWithMarks[n]?.mark.markDisplayValue | colorMark: true"
             [matTooltip]="
               (convertToDate(element.gradesWithMarks[n]?.date) | date) || ''
             "
@@ -100,9 +123,11 @@
           <mat-divider></mat-divider>
           <div class="grade-row">
             <span>{{
-              webuntis.convertDate(grade.date.toString()) | date
+              convertToDate(grade.date.toString()) | date
             }}</span>
-            <span>{{ grade.mark.name }}</span>
+            <span
+              [class]="grade.mark.markDisplayValue | colorMark: true"
+            >{{ grade.mark.name }}</span>
           </div>
         </div>
         <div class="btn-row">

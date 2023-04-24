@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WebuntisApiService } from './webuntis/webuntisApi.service';
 import { LoadingService } from './loading/loading.service';
+import { Person } from '@classmate/api-interfaces';
 
 @Component({
   selector: 'classmate-root',
@@ -19,7 +20,7 @@ export class AppComponent {
 
   logout() {
     this.loading.setLoading(true)
-    this.webUntis.logout(this.router).subscribe();
+    this.webUntis.logout().subscribe();
   }
 
   isLoggedIn(): boolean {
@@ -39,5 +40,15 @@ export class AppComponent {
 
   backToHome() {
     this.router.navigate(['']);
+  }
+
+  getUser(): Person | null {
+    if (this.webUntis.isLoggedIn()) {
+      return this.webUntis.student;
+    }
+    else {
+      this.webUntis.logout()
+      return null;
+    }
   }
 }

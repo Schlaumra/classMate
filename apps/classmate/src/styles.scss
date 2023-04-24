@@ -33,6 +33,7 @@ $my-theme: mat.define-light-theme(
 @include mat.tooltip-theme($my-theme);
 @include mat.expansion-theme($my-theme);
 @include mat.form-field-theme($my-theme);
+@include mat.menu-theme($my-theme);
 @include theme.theme(
   $my-theme,
   $my-typography,
@@ -74,7 +75,8 @@ $gap: 30px;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100px;
+      min-height: 100px;
+      height: 100%;
       font-weight: 600;
       font-size: 2rem;
     }

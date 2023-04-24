@@ -30,6 +30,34 @@
       }}</span></mat-card-content
     >
   </mat-card>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title i18n>Average Calculator</mat-card-title>
+      <mat-card-subtitle i18n>Insert expected grades</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="calculator">
+        <div class="average">{{calculatorAverage | async | number: '1.0-2'}}</div>
+        <mat-divider></mat-divider>
+        <div class="grades">
+          <span *ngFor="let grade of (calculatorGrades | async)"
+          >{{grade}}</span>
+          <button mat-icon-button color="primary" [hidden]="calculatorGrades$.getValue().length < 1" class="material-symbols-rounded" (click)="deleteLastGrade()">
+            <mat-icon>backspace</mat-icon>
+          </button>
+        </div>
+        <div class="grade-input">
+          <input matInput type="number" [formControl]="calculatorInput" min="1" max="10">
+          <button 
+          mat-raised-button
+          [disabled]="!calculatorInput.valid"
+          (click)="addNewGrade()"
+          color="primary"
+          ><mat-icon class="material-symbols-rounded">add</mat-icon></button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>
 
 <mat-card class="chart-card">

@@ -1,3 +1,53 @@
 .subject-header {
   overflow-wrap: break-word;
 }
+
+.calculator {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 30px;
+
+  .average {
+    text-align: center;
+    margin: 10px;
+  }
+  .grades {
+    font-size: large;
+    font-weight: normal;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    span {
+      margin: 0 10px;
+    }
+  }
+
+  .grade-input {
+    display: flex;
+    margin-top: 20px;
+    align-items: stretch;
+    height: 50px;
+    gap: 20px;
+    justify-content: center;
+
+    input {
+      width: 50px;
+      text-align: center;
+      font-size: 1.2rem;
+    }
+
+    button {
+      height: auto;
+      width: 50px;
+      mat-icon {
+        margin: 0;
+        font-size: 1.5rem;
+        height: 1.5rem;
+        width: 1.5rem;
+      }
+    }
+  }
+}

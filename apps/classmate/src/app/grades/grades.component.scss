@@ -2,10 +2,42 @@ $border-thick: 1px;
 $border-color: #000000;
 $hover-color: rgba($color: #000000, $alpha: 0.05);
 
+.recent-marks {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 20px;
+  .grade-row {
+    align-self: flex-start;
+    width: 100%;
+    .grade-line {
+      display: flex;
+      justify-content: space-between;
+      font-weight: normal;
+      font-size: 1rem;
+      margin: 5px 0;
+
+      span {
+        margin: 0 10px;
+      }
+
+      .subject {
+        max-width: 100px;
+        width: 100%;
+      }
+    }
+  }
+}
+
 .grade-table {
   .matColumnGrades {
     padding: 0 10px;
     justify-content: center;
+  }
+
+  .mat-mdc-header-cell {
+    font-size: 1.1rem;
+    font-weight: 500;
   }
 
   .mat-mdc-row:hover {
@@ -13,7 +45,7 @@ $hover-color: rgba($color: #000000, $alpha: 0.05);
   }
 
   .cdk-column-average {
-    max-width: 110px;
+    max-width: 140px;
     border-left: $border-thick solid $border-color;
     justify-content: center;
     font-weight: bold;

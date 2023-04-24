@@ -10,12 +10,12 @@ import { Pipe, PipeTransform } from '@angular/core';
  */
 @Pipe({ name: 'colorMark' })
 export class ColorMarkPipe implements PipeTransform {
-  transform(value: number | null | unknown): string {
+  transform(value: number | null | unknown, onlyNegative = false): string {
     return value == 0 || value == null
       ? ''
       : value < 6
       ? 'focus-attention'
-      : value < 7
+      : value < 6.5 && !onlyNegative
       ? 'focus-warn'
       : '';
   }

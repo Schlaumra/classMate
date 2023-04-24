@@ -24,13 +24,26 @@
       <div class="right">
         <button
           class="material-symbols-rounded"
-          *ngIf="isLoggedIn()"
           mat-icon-button
-          matSuffix
-          (click)="logout()"
+          [matMenuTriggerFor]="menu"
+          aria-label="Example icon-button with a menu"
+          *ngIf="isLoggedIn()"
         >
-          <mat-icon>logout</mat-icon>
+          <mat-icon>menu</mat-icon>
         </button>
+        <mat-menu #menu="matMenu">
+          <div class="menu-name">
+            <mat-icon class="material-symbols-rounded">account_circle</mat-icon>
+            <span>{{ getUser()?.displayName }}</span>
+          </div>
+          <mat-divider></mat-divider>
+
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon class="material-symbols-rounded">logout</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
       </div>
     </mat-toolbar>
   </div>

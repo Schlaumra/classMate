@@ -25,7 +25,6 @@ import {
   LoginDtoResponse,
   Method,
   Person,
-  PersonType,
   SchoolYear,
   BadCredentials,
 } from '@classmate/api-interfaces';
@@ -77,7 +76,7 @@ export class WebuntisApiService {
     if (student) {
       return JSON.parse(student);
     }
-    throw Error('Not logged in as a User');
+    throw Error("Not logged in")
   }
 
   set sessionId(v: string) {
@@ -99,16 +98,9 @@ export class WebuntisApiService {
   constructor(
     private http: HttpClient,
     private cookieService: CookieService,
+    private router: Router,
     public jwtHelper: JwtHelperService
   ) {}
-
-  subject!: {
-    klasseId: number;
-    personId: number;
-    personType: PersonType;
-    sessionId: string;
-  };
-  data!: DataSubject;
 
   postJsonRpcApi<T>(
     method: Method,
@@ -159,11 +151,11 @@ export class WebuntisApiService {
 
     const data$ = this.getData().pipe(
       tap((loginData) => {
-        this.data = loginData;
-        if (this.data.user.roles.includes('STUDENT')) {
-          this.student = this.data.user.person;
+        const data: DataSubject = loginData;
+        if (data.user.roles.includes('STUDENT')) {
+          this.student = data.user.person;
         } else {
-          this.student = this.data.user.students[0];
+          this.student = data.user.students[0];
         }
       })
     );
@@ -196,8 +188,7 @@ export class WebuntisApiService {
             throw Error(`(${error.code}): ${error.message}`);
           }
         } else {
-          this.subject = jsonRpcAuth.result;
-          this.sessionId = this.subject.sessionId;
+          this.sessionId = jsonRpcAuth.result.sessionId;
         }
       }),
       shareReplay()
@@ -207,17 +198,27 @@ export class WebuntisApiService {
   }
 
   isLoggedIn(): boolean {
+    let loggedIn = true
+    try {
+      loggedIn = loggedIn
+        && Boolean(this.student)
+        && Boolean(this.jwtHelper.tokenGetter())
+        && Boolean(this.sessionId)
+      return loggedIn
+    }
+    catch {
+      return false
+    }
     // TODO: Update to check all data
-    return Boolean(this.jwtHelper.tokenGetter());
   }
 
-  logout(router: Router): Observable<undefined> {
+  logout(): Observable<undefined> {
     return this.postJsonRpcApi(Method.LOGOUT).pipe(
       map(() => undefined),
       finalize(() => {
         this.cookieService.deleteAll();
         localStorage.clear();
-        router.navigate(['/']);
+        this.router.navigate(['/']);
       })
     );
   }
