@@ -43,14 +43,6 @@ export class BadCredentials extends DtoError {
   }
 }
 
-export interface LoginDto extends dto {
-  params: {
-    user: string;
-    password: string;
-    client: string;
-  };
-}
-
 export interface LoginDtoResponse extends dtoResponse {
   result: {
     klasseId: number;
@@ -87,10 +79,6 @@ export interface SchoolYear {
 
 export interface GetCurrentSchoolYearDtoResponse extends dtoResponse {
   result: SchoolYear;
-}
-
-export interface GetSchoolYearsDtoResponse extends dtoResponse {
-  result: SchoolYear[];
 }
 
 export interface Lesson {

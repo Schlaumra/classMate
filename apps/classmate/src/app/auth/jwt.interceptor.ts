@@ -10,6 +10,7 @@ import {
 import { Observable, tap } from 'rxjs';
 import { WebuntisApiService } from '../webuntis/webuntisApi.service';
 
+// Intercepts when there is an error or the jwtToken is expired
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
   constructor(private webUntis: WebuntisApiService) {}
@@ -28,7 +29,7 @@ export class JwtInterceptor implements HttpInterceptor {
         },
         // Operation failed; error is an HttpErrorResponse
         error: (error: HttpErrorResponse) => {
-          console.log(error)
+          console.log(error);
           this.webUntis.logout().subscribe();
         },
       })

@@ -45,7 +45,8 @@ $hover-color: rgba($color: #000000, $alpha: 0.05);
   }
 
   .cdk-column-average {
-    max-width: 140px;
+    max-width: 150px;
+    min-width: 140px;
     border-left: $border-thick solid $border-color;
     justify-content: center;
     font-weight: bold;

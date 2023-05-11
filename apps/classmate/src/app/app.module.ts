@@ -8,11 +8,11 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatMenuModule } from '@angular/material/menu'
+import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
-import { MatSortModule } from '@angular/material/sort'
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
@@ -28,7 +28,7 @@ import { LoginComponent } from './login/login.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import {
   HttpCacheInterceptorModule,
-  useHttpCacheLocalStorage
+  useHttpCacheLocalStorage,
 } from '@ngneat/cashew';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { HttpInterceptorProviders } from './auth/index';
@@ -47,7 +47,7 @@ import { SubjectComponent } from './subject/subject.component';
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    JwtModule.forRoot({
+    JwtModule.forRoot({ // Set the function to get the jwt token (API-Token)
       config: {
         tokenGetter: () => {
           return localStorage.getItem('apiToken');
@@ -70,7 +70,7 @@ import { SubjectComponent } from './subject/subject.component';
     MatSortModule,
     MatCardModule,
     NgxChartsModule,
-    HttpCacheInterceptorModule.forRoot({
+    HttpCacheInterceptorModule.forRoot({ // The Cache for the http requests
       ttl: 1000 * 1, // 1min // TODO: Reset to 1min
       responseSerializer(body) {
         return structuredClone(body);

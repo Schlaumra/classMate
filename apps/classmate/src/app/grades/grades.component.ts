@@ -1,5 +1,11 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { Grade, GradeCollectionBySubject } from '@classmate/api-interfaces';
 import { LoadingService } from '../loading/loading.service';
@@ -15,19 +21,22 @@ import { MatAccordion } from '@angular/material/expansion';
   styleUrls: ['./grades.component.scss'],
 })
 export class GradesComponent implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChild(MatSort) sort!: MatSort; // ViewChild to grab a reference to the MatSort directive
-  @ViewChild(MatAccordion) accordion!: MatAccordion;
-  accordionStatus = false;
-  
+  // Mobile View
   mobile = false;
   destroyed = new Subject<void>();
+  accordionStatus = false;
+  @ViewChild(MatAccordion) accordion!: MatAccordion;
+
+  // Desktop View
   displayedColumns: string[] = ['subject'];
+  @ViewChild(MatSort) sort!: MatSort;
+
+  // Values
+  allGrades: { lesson: string; mark: Grade }[] = [];
   maxGradeLength = 0;
-  sumGrades = 0;
   averageMark = 0;
-  negativeMarks = 0;
   positiveMarks = 0;
-  allGrades: {lesson: string, mark: Grade}[] = []
+  negativeMarks = 0;
   dataSource = new MatTableDataSource<GradeCollectionBySubject>();
 
   constructor(
@@ -51,37 +60,60 @@ export class GradesComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit(): void {
     this.contentLoading.setLoading(true);
+
+    
     this.webuntis
       .getGrades()
       .pipe(toArray())
       .subscribe((gradesPerSubject) => {
-        gradesPerSubject.sort((a, b) =>
-          a.lesson.subjects.localeCompare(b.lesson.subjects)
-        );
-        gradesPerSubject.forEach((subject) => {
-          subject.gradesWithMarks.forEach((grade) => {
-            this.allGrades.push({ lesson: subject.lesson.subjects, mark: grade})
-          })
-          this.allGrades.sort((a, b) => a.mark.lastUpdate - b.mark.lastUpdate) // Sort by Date
 
+        // Sort grades alphabetically
+        gradesPerSubject.sort((a, b) => a.lesson.subjects.localeCompare(b.lesson.subjects));
+
+        // 
+        gradesPerSubject.forEach((subject) => {
+          // Add to the grade array to later use them for calculations
+          subject.gradesWithMarks.forEach((grade) => {
+            this.allGrades.push({
+              lesson: subject.lesson.subjects,
+              mark: grade,
+            });
+          });
+
+          this.allGrades.sort((a, b) => a.mark.lastUpdate - b.mark.lastUpdate); // Sort by Date
+          
+          // Count the grades per subject and get the longest one for the mark table
           const len = subject.gradesWithMarks.length;
-          this.maxGradeLength =
-            len > this.maxGradeLength ? len : this.maxGradeLength;
+          this.maxGradeLength = len > this.maxGradeLength ? len : this.maxGradeLength;
+          
+          // Count positive and negative marks
           this.negativeMarks += subject.negativeMarks || 0;
           this.positiveMarks += subject.positiveMarks || 0;
         });
+
+        // Add columns for the marks
         for (let i = 0; i < this.maxGradeLength; i++) {
           this.displayedColumns.push(i.toString());
         }
+
+        // Add average line to table
         this.displayedColumns.push('average');
-        this.averageMark = this.allGrades.reduce((accumulator, current) => accumulator + current.mark.mark.markValue, 0) / this.allGrades.length / 100
+
+        // Calculate the average sum of all marks
+        this.averageMark = this.allGrades.reduce((accumulator, current) => accumulator + current.mark.mark.markValue, 0) / this.allGrades.length / 100;
+        
+        // Custom sortingDataAccessor for the sorting the table by item.lesson.subjects
         this.dataSource.sortingDataAccessor = (item: any, property: any) => {
-          switch(property) {
-            case 'subjects': return item.lesson.subjects;
-            default: return item[property];
+          switch (property) {
+            case 'subjects':
+              return item.lesson.subjects;
+            default:
+              return item[property];
           }
-        }
-        this.dataSource.data = gradesPerSubject
+        };
+
+        // Set dataSource and remove loading screen
+        this.dataSource.data = gradesPerSubject;
         this.contentLoading.setLoading(false);
       });
   }
@@ -90,12 +122,25 @@ export class GradesComponent implements OnInit, OnDestroy, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
+  /**
+   * Redirects to the subject site of the corresponding id
+   *
+   * @param id - The corresponding id
+   *
+   */
   redirectToSubject(id: number | null) {
     if (id) {
       this.router.navigate(['subject'], { queryParams: { id: id } });
     }
   }
 
+  /**
+   * Converts a date string from WebUntis to a Date
+   *
+   * @param date - The date as a string in this format: "19991230"
+   * @returns The Date or null
+   *
+   */
   convertToDate(date: string | null): Date | null {
     if (date) {
       return this.webuntis.convertDate(date.toString());

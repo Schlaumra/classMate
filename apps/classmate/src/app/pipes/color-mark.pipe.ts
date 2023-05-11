@@ -1,15 +1,18 @@
 import { Pipe, PipeTransform } from '@angular/core';
-/*
- * Raise the value exponentially
- * Takes an exponent argument that defaults to 1.
- * Usage:
- *   value | exponentialStrength:exponent
- * Example:
- *   {{ 2 | exponentialStrength:10 }}
- *   formats to: 1024
+
+/**
+ * Returns a color based on the mark
  */
 @Pipe({ name: 'colorMark' })
 export class ColorMarkPipe implements PipeTransform {
+
+  /**
+   * Transform a mark to a color class
+   * 
+   * @param value mark from 0 to 10
+   * @param onlyNegative color only under 6
+   * @returns the css class
+   */
   transform(value: number | null | unknown, onlyNegative = false): string {
     return value == 0 || value == null
       ? ''
