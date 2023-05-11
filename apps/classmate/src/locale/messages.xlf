@@ -53,21 +53,35 @@
         <source> Subject </source>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/classmate/src/app/grades/grades.component.html</context>
-          <context context-type="linenumber">61,62</context>
+          <context context-type="linenumber">62,63</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4582960895311066471" datatype="html">
         <source> Average </source>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/classmate/src/app/grades/grades.component.html</context>
-          <context context-type="linenumber">88,89</context>
+          <context context-type="linenumber">89,90</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5008745968518267369" datatype="html">
+        <source>Expand All</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/classmate/src/app/grades/grades.component.html</context>
+          <context context-type="linenumber">110</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8088663872040483564" datatype="html">
+        <source>Collapse All</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/classmate/src/app/grades/grades.component.html</context>
+          <context context-type="linenumber">111</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7715848895573190774" datatype="html">
         <source> Analytics </source>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/classmate/src/app/grades/grades.component.html</context>
-          <context context-type="linenumber">139,140</context>
+          <context context-type="linenumber">144,145</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5248717555542428023" datatype="html">

@@ -68,6 +68,7 @@ export class SubjectComponent implements OnInit {
         this.subject.subscribe((value) => {
           this.calculatorGrades$.next(value.gradesWithMarks.map(value => value.mark.markValue / 100))
           this.subjectInfo = this.webuntis.getSubject(value.lesson.subjects);
+          console.log(value)
           this.data[0].name = value.lesson.subjects;
           this.calculatorAverage$.next(value.averageMark)
           value.grades.forEach((grade, i) => {
@@ -81,6 +82,7 @@ export class SubjectComponent implements OnInit {
             }
           });
           this.data = [...this.data];
+          console.log(this.data)
           this.contentLoading.setLoading(false);
         });
       }

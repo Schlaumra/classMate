@@ -1,47 +1,34 @@
-import { DataSource } from '@angular/cdk/collections';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Grade, GradeCollectionBySubject } from '@classmate/api-interfaces';
-import { Observable, ReplaySubject, Subject, takeUntil, toArray } from 'rxjs';
 import { LoadingService } from '../loading/loading.service';
 import { WebuntisApiService } from '../webuntis/webuntisApi.service';
-
-export class GradeDataSource extends DataSource<GradeCollectionBySubject> {
-  /** Stream of data that is provided to the table. */
-  data = new ReplaySubject<GradeCollectionBySubject[]>();
-
-  update(value: GradeCollectionBySubject[]) {
-    this.data.next(value);
-  }
-
-  /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect(): Observable<GradeCollectionBySubject[]> {
-    return this.data;
-  }
-
-  disconnect() {
-    console.log('disconect from data');
-  }
-}
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { Subject, takeUntil, toArray } from 'rxjs';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'classmate-grades',
   templateUrl: './grades.component.html',
   styleUrls: ['./grades.component.scss'],
 })
-export class GradesComponent implements OnInit, OnDestroy {
+export class GradesComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild(MatSort) sort!: MatSort; // ViewChild to grab a reference to the MatSort directive
+  @ViewChild(MatAccordion) accordion!: MatAccordion;
+  accordionStatus = false;
+  
   mobile = false;
   destroyed = new Subject<void>();
   displayedColumns: string[] = ['subject'];
-  dataSource = new GradeDataSource();
   maxGradeLength = 0;
   sumGrades = 0;
   averageMark = 0;
   negativeMarks = 0;
   positiveMarks = 0;
-  gradeArray = Array.from({ length: 10 }, (e, i) => i);
   allGrades: {lesson: string, mark: Grade}[] = []
+  dataSource = new MatTableDataSource<GradeCollectionBySubject>();
 
   constructor(
     protected webuntis: WebuntisApiService,
@@ -80,7 +67,6 @@ export class GradesComponent implements OnInit, OnDestroy {
           const len = subject.gradesWithMarks.length;
           this.maxGradeLength =
             len > this.maxGradeLength ? len : this.maxGradeLength;
-
           this.negativeMarks += subject.negativeMarks || 0;
           this.positiveMarks += subject.positiveMarks || 0;
         });
@@ -89,9 +75,19 @@ export class GradesComponent implements OnInit, OnDestroy {
         }
         this.displayedColumns.push('average');
         this.averageMark = this.allGrades.reduce((accumulator, current) => accumulator + current.mark.mark.markValue, 0) / this.allGrades.length / 100
-        this.dataSource.update(gradesPerSubject);
+        this.dataSource.sortingDataAccessor = (item: any, property: any) => {
+          switch(property) {
+            case 'subjects': return item.lesson.subjects;
+            default: return item[property];
+          }
+        }
+        this.dataSource.data = gradesPerSubject
         this.contentLoading.setLoading(false);
       });
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
   }
 
   redirectToSubject(id: number | null) {

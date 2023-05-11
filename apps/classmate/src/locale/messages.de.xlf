@@ -74,6 +74,22 @@
           <context context-type="linenumber">65,66</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="5008745968518267369" datatype="html">
+        <source>Expand All</source>
+        <target>Alle ausklappen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/classmate/src/app/grades/grades.component.html</context>
+          <context context-type="linenumber">110</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8088663872040483564" datatype="html">
+        <source>Collapse All</source>
+        <target>Alle einklappen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/classmate/src/app/grades/grades.component.html</context>
+          <context context-type="linenumber">111</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7715848895573190774" datatype="html">
         <source> Analytics </source>
         <target> Details </target>

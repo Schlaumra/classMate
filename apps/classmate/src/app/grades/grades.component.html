@@ -28,7 +28,7 @@
     </mat-card-header>
     <mat-card-content>
       <div class="recent-marks">
-        <div *ngFor="let grade of allGrades.slice(-3)" class="grade-row">
+        <div *ngFor="let grade of allGrades.slice(-3).reverse()" class="grade-row">
           <mat-divider></mat-divider>
           <div class="grade-line">
             <span class="subject">
@@ -51,11 +51,12 @@
 <ng-template #desktopView>
   <mat-card class="mat-elevation-z2">
     <div class="grade-table">
-      <mat-table #table [dataSource]="dataSource">
+      <mat-table #table [dataSource]="dataSource" matSort>
         <ng-container matColumnDef="subject">
           <mat-header-cell
             class="matColumnSubject"
             *matHeaderCellDef
+            mat-sort-header="subjects"
             i18n
           >
             Subject
@@ -65,7 +66,7 @@
           </mat-cell>
         </ng-container>
 
-        <ng-container *ngFor="let n of gradeArray" matColumnDef="{{ n }}">
+        <ng-container *ngFor="let _ of [].constructor(this.maxGradeLength); index as n" matColumnDef="{{ n }}">
           <mat-header-cell
             class="matColumnGrades"
             *matHeaderCellDef
@@ -84,7 +85,7 @@
         </ng-container>
 
         <ng-container matColumnDef="average">
-          <mat-header-cell class="matColumnAverage" *matHeaderCellDef i18n>
+          <mat-header-cell class="matColumnAverage" *matHeaderCellDef mat-sort-header="averageMark" i18n>
             Average
           </mat-header-cell>
           <mat-cell class="matColumn" *matCellDef="let element">
@@ -97,7 +98,7 @@
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row
           *matRowDef="let row; columns: displayedColumns"
-          (click)="redirectToSubject(row?.lesson?.id)"
+          (click)="row?.gradesWithMarks.length !== 0 ? redirectToSubject(row?.lesson?.id) : null"
         ></mat-row>
       </mat-table>
     </div>
@@ -105,6 +106,10 @@
 </ng-template>
 
 <ng-template #mobileView>
+  <div class="mobile-control-area">
+    <button *ngIf="!accordionStatus" mat-button (click)="accordion.openAll(); accordionStatus = !accordionStatus" i18n>Expand All</button>
+    <button *ngIf="accordionStatus" mat-button (click)="accordion.closeAll(); accordionStatus = !accordionStatus" i18n>Collapse All</button>
+  </div>
   <mat-accordion class="grade-accordion" multi>
     <mat-expansion-panel
       *ngFor="let item of dataSource.connect() | async"
