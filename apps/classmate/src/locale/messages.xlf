@@ -63,14 +63,14 @@
           <context context-type="linenumber">89,90</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5583704259094754286" datatype="html">
+      <trans-unit id="5008745968518267369" datatype="html">
         <source>Expand All</source>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/classmate/src/app/grades/grades.component.html</context>
           <context context-type="linenumber">110</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="588893607379970159" datatype="html">
+      <trans-unit id="8088663872040483564" datatype="html">
         <source>Collapse All</source>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/classmate/src/app/grades/grades.component.html</context>
@@ -116,28 +116,28 @@
         <source>Wrong Username or Password</source>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/classmate/src/app/login/login.component.ts</context>
-          <context context-type="linenumber">58</context>
+          <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6650633628037596693" datatype="html">
         <source>Try again</source>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/classmate/src/app/login/login.component.ts</context>
-          <context context-type="linenumber">58</context>
+          <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1564321369941600198" datatype="html">
         <source>An unexpected Error happened</source>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/classmate/src/app/login/login.component.ts</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6377887390461423650" datatype="html">
         <source>Try again later</source>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/classmate/src/app/login/login.component.ts</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7659798892637223342" datatype="html">
