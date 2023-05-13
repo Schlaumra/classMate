@@ -38,7 +38,7 @@
             [class]="grade.mark.mark.markDisplayValue | colorMark: true"
           >{{ grade.mark.mark.name }}</span>
             <span>{{
-              convertToDate(grade.mark.date.toString()) | date
+              grade.mark.date | date
             }}</span>
           </div>
         </div>
@@ -66,21 +66,24 @@
           </mat-cell>
         </ng-container>
 
-        <ng-container *ngFor="let _ of [].constructor(this.maxGradeLength); index as n" matColumnDef="{{ n }}">
+        <ng-container *ngFor="let i of this.monthArray; index as n" matColumnDef="{{ i }}">
           <mat-header-cell
             class="matColumnGrades"
             *matHeaderCellDef
-          ></mat-header-cell>
+          >{{ convertMonthToDate(i) | date: "MMM"}}</mat-header-cell>
 
           <mat-cell
             class="matColumnGrades"
             *matCellDef="let element"
-            [class]="element.gradesWithMarks[n]?.mark.markDisplayValue | colorMark: true"
-            [matTooltip]="
-              (convertToDate(element.gradesWithMarks[n]?.date) | date) || ''
-            "
           >
-            {{ element.gradesWithMarks[n]?.mark.name }}
+            <div
+              *ngFor="let mGrade of getGradesFromMonth(element, i)"
+              [class]="mGrade.mark.markDisplayValue | colorMark: true"
+              class="matColumnGradesMark"
+              [matTooltip]="(mGrade.date | date) || ''"
+            >
+              {{mGrade.mark.name}}
+            </div>
           </mat-cell>
         </ng-container>
 
@@ -128,7 +131,7 @@
           <mat-divider></mat-divider>
           <div class="grade-row">
             <span>{{
-              convertToDate(grade.date.toString()) | date
+              grade.date | date
             }}</span>
             <span
               [class]="grade.mark.markDisplayValue | colorMark: true"

@@ -358,7 +358,10 @@ export class WebuntisApiService {
         const res = data.data;
         res.gradesWithMarks = res.grades.filter(
           (value: Grade) => value.mark.markValue != 0 // Filter out marks without marks
-        );
+        ).map((value: Grade) => {
+          value.date = this.convertDate(value.date.toString())
+          return value
+        });
         if (res.gradesWithMarks.length > 0) {
           // Count positive and negative marks
           res.positiveMarks = res.gradesWithMarks.filter((value: Grade) => value.mark.markDisplayValue >= 6).length;

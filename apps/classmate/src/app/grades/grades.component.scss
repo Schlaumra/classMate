@@ -1,5 +1,7 @@
-$border-thick: 1px;
+$border-thick: 2px;
+$border-thin: 1px;
 $border-color: #000000;
+$border-color-light: rgba($color: #000000, $alpha: 0.3);;
 $hover-color: rgba($color: #000000, $alpha: 0.05);
 
 .recent-marks {
@@ -30,8 +32,23 @@ $hover-color: rgba($color: #000000, $alpha: 0.05);
 }
 
 .grade-table {
+  .matColumnGrades:first {
+    border: none
+  }
+
   .matColumnGrades {
-    padding: 0 10px;
+    border-left: $border-thin solid $border-color-light;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    
+    .matColumnGradesMark {
+      padding: 7px;
+      text-align: center;
+      flex-grow: 1;
+    }
+  }
+
+  .cdk-header-cell.matColumnGrades {
     justify-content: center;
   }
 

@@ -98,7 +98,7 @@ export interface Mark {
 }
 
 export interface Grade {
-  date: number;
+  date: Date;
   examId: number;
   examType: {
     id: number;

@@ -7,7 +7,7 @@ import {
   Subject,
 } from '@classmate/api-interfaces';
 import { ChartComponent, Color, ScaleType } from '@swimlane/ngx-charts';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { LoadingService } from '../loading/loading.service';
 import { WebuntisApiService } from '../webuntis/webuntisApi.service';
 
@@ -86,7 +86,7 @@ export class SubjectComponent implements OnInit {
             if (grade.mark.markDisplayValue != 0) {
               this.data[0]['series'].push({
                 name: `${i + 1} - ${this.datePipe.transform(
-                  this.webuntis.convertDate(grade.date.toString())
+                  grade.date
                 )}`,
                 value: grade.mark.markDisplayValue,
               });

@@ -33,7 +33,7 @@ export class GradesComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // Values
   allGrades: { lesson: string; mark: Grade }[] = [];
-  maxGradeLength = 0;
+  monthArray: number[] = [];
   averageMark = 0;
   positiveMarks = 0;
   negativeMarks = 0;
@@ -70,6 +70,7 @@ export class GradesComponent implements OnInit, OnDestroy, AfterViewInit {
         // Sort grades alphabetically
         gradesPerSubject.sort((a, b) => a.lesson.subjects.localeCompare(b.lesson.subjects));
 
+        const monthArray: Date[] = []
         // 
         gradesPerSubject.forEach((subject) => {
           // Add to the grade array to later use them for calculations
@@ -78,23 +79,27 @@ export class GradesComponent implements OnInit, OnDestroy, AfterViewInit {
               lesson: subject.lesson.subjects,
               mark: grade,
             });
+            monthArray.push(grade.date)
           });
 
           this.allGrades.sort((a, b) => a.mark.lastUpdate - b.mark.lastUpdate); // Sort by Date
-          
-          // Count the grades per subject and get the longest one for the mark table
-          const len = subject.gradesWithMarks.length;
-          this.maxGradeLength = len > this.maxGradeLength ? len : this.maxGradeLength;
           
           // Count positive and negative marks
           this.negativeMarks += subject.negativeMarks || 0;
           this.positiveMarks += subject.positiveMarks || 0;
         });
 
-        // Add columns for the marks
-        for (let i = 0; i < this.maxGradeLength; i++) {
-          this.displayedColumns.push(i.toString());
-        }
+        monthArray.sort((a: Date, b: Date) => {
+          return b.getTime() - a.getTime();
+        }).reverse()
+        
+        this.monthArray = [...new Set(monthArray.map((val) => val.getUTCMonth()))]
+
+        // Add months to the table
+        this.monthArray.forEach((i) => {
+          this.displayedColumns.push(i.toString())
+        })
+
 
         // Add average line to table
         this.displayedColumns.push('average');
@@ -135,16 +140,17 @@ export class GradesComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /**
-   * Converts a date string from WebUntis to a Date
+   * Converts a month index to a Date
    *
-   * @param date - The date as a string in this format: "19991230"
+   * @param month - The month from 0 to 11
    * @returns The Date or null
    *
    */
-  convertToDate(date: string | null): Date | null {
-    if (date) {
-      return this.webuntis.convertDate(date.toString());
+    convertMonthToDate(month: number): Date {
+      return new Date(2000, month, 2)
     }
-    return null;
-  }
+
+    getGradesFromMonth(grades: GradeCollectionBySubject, month: number): Grade[] {
+      return grades.gradesWithMarks.filter((value) => value.date.getMonth() == month)
+    }
 }
