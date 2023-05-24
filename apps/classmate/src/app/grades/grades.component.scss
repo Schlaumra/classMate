@@ -72,6 +72,11 @@ $hover-color: rgba($color: #000000, $alpha: 0.05);
   .cdk-column-subject {
     border-right: $border-thick solid $border-color;
   }
+
+  .cdk-column-select {
+    flex: none;
+    padding: 0 0 0 10px;
+  }
 }
 
 .grade-accordion {

@@ -52,6 +52,21 @@
   <mat-card class="mat-elevation-z2">
     <div class="grade-table">
       <mat-table #table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="select">
+          <mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                          [checked]="selection.hasValue() && isAllSelected()"
+                          [indeterminate]="selection.hasValue() && !isAllSelected()">
+            </mat-checkbox>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()"
+                          (change)="$event ? selection.toggle(row) : null"
+                          [checked]="selection.isSelected(row)">
+            </mat-checkbox>
+          </mat-cell>
+        </ng-container>
+        
         <ng-container matColumnDef="subject">
           <mat-header-cell
             class="matColumnSubject"
@@ -116,7 +131,7 @@
   <mat-accordion class="grade-accordion" multi>
     <mat-expansion-panel
       *ngFor="let item of dataSource.connect() | async"
-      [disabled]="item.grades.length === 0"
+      [disabled]="item.gradesWithMarks.length === 0"
     >
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -127,7 +142,7 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
       <div class="item-body">
-        <div *ngFor="let grade of item.grades">
+        <div *ngFor="let grade of item.gradesWithMarks">
           <mat-divider></mat-divider>
           <div class="grade-row">
             <span>{{

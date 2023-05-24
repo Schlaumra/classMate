@@ -4,6 +4,7 @@ import { isDevMode, NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
@@ -47,7 +48,8 @@ import { SubjectComponent } from './subject/subject.component';
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    JwtModule.forRoot({ // Set the function to get the jwt token (API-Token)
+    JwtModule.forRoot({
+      // Set the function to get the jwt token (API-Token)
       config: {
         tokenGetter: () => {
           return localStorage.getItem('apiToken');
@@ -69,8 +71,10 @@ import { SubjectComponent } from './subject/subject.component';
     MatTableModule,
     MatSortModule,
     MatCardModule,
+    MatCheckboxModule,
     NgxChartsModule,
-    HttpCacheInterceptorModule.forRoot({ // The Cache for the http requests
+    HttpCacheInterceptorModule.forRoot({
+      // The Cache for the http requests
       ttl: 1000 * 1, // 1min // TODO: Reset to 1min
       responseSerializer(body) {
         return structuredClone(body);
