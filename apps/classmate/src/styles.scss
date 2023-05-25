@@ -41,20 +41,31 @@ $my-theme: mat.define-light-theme(
 
 @include mat.typography-hierarchy($my-theme);
 
+$color-main: mat.get-color-from-palette(col.$my-primary, 800);
+$color-ok: mat.get-color-from-palette(col.$my-success, 800);
+$color-warn: mat.get-color-from-palette(col.$my-warn, 900);
+$color-attention: mat.get-color-from-palette(col.$my-attention, 700);
+
+:root {
+  --color-main: #{$color-main};
+  --color-ok: #{$color-ok};
+  --color-warn: #{$color-warn};
+  --color-attention: #{$color-attention};
+}
 
 
 // Focus Colors
 
 .focus-ok {
-  color: mat.get-color-from-palette(col.$my-success, 800);
+  color: $color-ok;
 }
 
 .focus-warn {
-  color: mat.get-color-from-palette(col.$my-warn, 900);
+  color: $color-warn;
 }
 
 .focus-attention {
-  color: mat.get-color-from-palette(col.$my-attention, 800);
+  color: $color-attention;
 }
 
 

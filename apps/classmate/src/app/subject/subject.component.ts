@@ -50,7 +50,6 @@ export class SubjectComponent implements OnInit {
   subject!: Observable<GradeCollectionBySubject>;
   subjectInfo!: Observable<Subject | undefined>;
 
-
   // values und options for the gradeChart
   @ViewChild('gradeChart') gradeChart!: ChartComponent;
   yAxisMin = 4;
@@ -77,7 +76,6 @@ export class SubjectComponent implements OnInit {
           );
           this.calculatorAverage$.next(value.averageMark);
 
-
           this.subjectInfo = this.webuntis.getSubject(value.lesson.subjects); // Get Subject Info
           this.data[0].name = value.lesson.subjects; // Set the data set name
 
@@ -85,9 +83,7 @@ export class SubjectComponent implements OnInit {
           value.grades.forEach((grade, i) => {
             if (grade.mark.markDisplayValue != 0) {
               this.data[0]['series'].push({
-                name: `${i + 1} - ${this.datePipe.transform(
-                  grade.date
-                )}`,
+                name: `${i + 1} - ${this.datePipe.transform(grade.date)}`,
                 value: grade.mark.markDisplayValue,
               });
             }
@@ -120,10 +116,11 @@ export class SubjectComponent implements OnInit {
   }
 
   /**
-   * Delete the last grade in the calculator
+   * Delete the grade by id in the calculator
    */
-  deleteLastGrade() {
-    this.calcGrades.pop();
+
+  deleteGrade(id: number) {
+    this.calcGrades.splice(id, 1);
     this.calculateNewAverage();
   }
 }

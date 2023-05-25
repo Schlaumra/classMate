@@ -13,15 +13,42 @@
     margin: 10px;
   }
   .grades {
+    margin-top: 10px;
     font-size: large;
     font-weight: normal;
-    text-align: center;
     display: flex;
+    gap: 20px;
     flex-wrap: wrap;
-    align-items: center;
+    justify-content:stretch;
 
-    span {
-      margin: 0 10px;
+    .grade {
+      text-align: center;
+      line-height: 50px;
+      border-radius: 6px;
+      box-shadow: var(--mdc-protected-button-container-elevation, 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12));
+      width: 55px;
+      height: 50px;
+      background-color: rgba($color: #000000, $alpha: 0.1);
+      
+      span.the-icon {
+        display: none;
+        font-family: "Material Symbols Rounded";
+      }
+
+      &:hover, &:active {
+        background-color: var(--color-attention);
+        color: white;
+        font-size: bold;
+        cursor: pointer;
+
+        span.the-icon {
+          display: block;
+        }
+
+        span.the-grade {
+          display: none;
+        }
+      }
     }
   }
 
