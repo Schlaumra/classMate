@@ -54,7 +54,7 @@ export class SubjectComponent implements OnInit {
   @ViewChild('gradeChart') gradeChart!: ChartComponent;
   yAxisMin = 4;
   yAxisMax = 10;
-  data: ChartData[] = [{ name: 'subject', series: [] }];
+  data: ChartData[] = [{ name: 'subject', series: [] }, { name: 'Trend', series: [] }];
   colorScheme: Color = {
     name: 'blueish',
     selectable: true,
@@ -70,6 +70,27 @@ export class SubjectComponent implements OnInit {
         this.subject = this.webuntis.getSubjectGrades(id);
 
         this.subject.subscribe((value) => {
+          // Calculate regression
+          const data = value.gradesWithMarks.map((value) => value.mark.markDisplayValue)
+          let a = 0 // Steigung
+          let b = 0 // Verschiebung
+
+          const avg_x = (data.length+1 * data.length/2) / data.length // Average sum 1 to length of Array
+          const avg_y = data.reduce((prev, curr) => prev + curr) / data.length // Average marks
+
+          let a1 = 0
+          let a2 = 0
+
+          // Regression
+          data.forEach((value, index) => {
+            index += 1
+            a1 += (index - avg_x) * (value - avg_y)
+            a2 += Math.pow((index - avg_x), 2)
+          })
+
+          a = a1 / a2 // Steigung durch Reggression
+          b = avg_y - a * avg_x // Verschiebung
+
           // Set values for the calculator
           this.calculatorGrades$.next(
             value.gradesWithMarks.map((value) => value.mark.markValue / 100)
@@ -82,10 +103,15 @@ export class SubjectComponent implements OnInit {
           // Transform the data and set the data set for the gradeChart
           value.grades.forEach((grade, i) => {
             if (grade.mark.markDisplayValue != 0) {
+              const name = `${i + 1} - ${this.datePipe.transform(grade.date)}`
               this.data[0]['series'].push({
-                name: `${i + 1} - ${this.datePipe.transform(grade.date)}`,
+                name: name,
                 value: grade.mark.markDisplayValue,
               });
+              this.data[1]['series'].push({
+                name: name,
+                value: a * i+1 + b-1,
+              })
             }
           });
           // Update the array so the chart updates
