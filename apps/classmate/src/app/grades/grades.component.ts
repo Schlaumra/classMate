@@ -12,9 +12,15 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Grade, GradeCollectionBySubject } from '@classmate/api-interfaces';
+import { PieChartComponent, Color, ScaleType } from '@swimlane/ngx-charts';
 import { map, Observable, Subject, takeUntil, toArray } from 'rxjs';
 import { LoadingService } from '../loading/loading.service';
 import { WebuntisApiService } from '../webuntis/webuntisApi.service';
+
+interface ChartData {
+  name: string;
+  value: number;
+}
 
 @Component({
   selector: 'classmate-grades',
@@ -42,6 +48,19 @@ export class GradesComponent implements OnInit, OnDestroy, AfterViewInit {
   dataSource = new MatTableDataSource<GradeCollectionBySubject>();
   selection = new SelectionModel<GradeCollectionBySubject>(true, []);
 
+  // values und options for the gradeChart
+  @ViewChild('gradeChart') gradeChart!: PieChartComponent;
+  yAxisMin = 4;
+  yAxisMax = 10;
+  data: ChartData[] = [];
+  view: [number, number] = [200, 200]
+  colorScheme: Color = {
+    name: 'mark',
+    selectable: true,
+    group: ScaleType.Linear,
+    domain: ['#BE0F18', '#FC565E', '#FFD241', '#5ADF4C', '#1A9E0C', '#5E58CA', '#221C87'],
+  };
+
   constructor(
     protected webuntis: WebuntisApiService,
     breakpointObserver: BreakpointObserver,
@@ -58,6 +77,21 @@ export class GradesComponent implements OnInit, OnDestroy, AfterViewInit {
       })
     );
     this.grades$.subscribe((grades) => {
+      grades.sort((a, b) => a.mark.mark.markDisplayValue - b.mark.mark.markDisplayValue)
+
+      // Count marks
+      this.data = []
+      grades.forEach(value => {
+        const mark = Math.floor(value.mark.mark.markDisplayValue).toString()
+        const index = this.data.findIndex((value) => value.name === mark ? true : false)
+        if (index !== -1) {
+          this.data[index].value += 1
+        }
+        else {
+          this.data.push({ name: mark, value: 1})
+        }
+      })
+      this.data = [...this.data]
       // Calculate the average sum of all marks
       this.averageMark =
         grades.reduce(
@@ -72,7 +106,33 @@ export class GradesComponent implements OnInit, OnDestroy, AfterViewInit {
       .pipe(takeUntil(this.destroyed))
       .subscribe((result) => {
         this.mobile = result.matches;
-      });
+    });
+    breakpointObserver
+      .observe([Breakpoints.XSmall])
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((result) => {
+        if (result.matches) {
+          this.view = [240, 200]
+        }
+    });
+    breakpointObserver
+      .observe([Breakpoints.Small])
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((result) => {
+        if (result.matches) {
+          this.view = [260, 200]
+        }
+    });
+    breakpointObserver
+      .observe([Breakpoints.Large])
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((result) => {
+        if (result.matches) {
+          this.view = [350, 200]
+        }
+    });
+
+
   }
 
   ngOnDestroy(): void {

@@ -4,11 +4,22 @@ $border-color: #000000;
 $border-color-light: rgba($color: #000000, $alpha: 0.3);;
 $hover-color: rgba($color: #000000, $alpha: 0.05);
 
+.chart-card {
+  padding: 0;
+  .chart-container {
+    height: 200px;
+  }
+}
+
+
 .recent-marks {
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: 100%;
   margin-top: 20px;
+  justify-content: space-evenly;
+
   .grade-row {
     align-self: flex-start;
     width: 100%;
@@ -17,7 +28,7 @@ $hover-color: rgba($color: #000000, $alpha: 0.05);
       justify-content: space-between;
       font-weight: normal;
       font-size: 1rem;
-      margin: 5px 0;
+      margin: 10px 0;
 
       span {
         margin: 0 10px;

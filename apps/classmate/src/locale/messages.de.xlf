@@ -21,10 +21,6 @@
           <context context-type="sourcefile">apps/classmate/src/app/grades/grades.component.html</context>
           <context context-type="linenumber">5</context>
         </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">apps/classmate/src/app/subject/subject.component.html</context>
-          <context context-type="linenumber">8</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="1414360806607714684" datatype="html">
         <source>Mark Ratio</source>
@@ -35,7 +31,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/classmate/src/app/subject/subject.component.html</context>
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1015967963486489965" datatype="html">
@@ -47,7 +43,15 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/classmate/src/app/subject/subject.component.html</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7036869518166833178" datatype="html">
+        <source>Mark Distribution</source>
+        <target>Notenverteilung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/classmate/src/app/grades/grades.component.html</context>
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4141299511102863832" datatype="html">
@@ -55,7 +59,7 @@
         <target>Kürzlich hinzugefügte Noten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/classmate/src/app/grades/grades.component.html</context>
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5824724870331417188" datatype="html">
@@ -63,7 +67,7 @@
         <target> Fach </target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/classmate/src/app/grades/grades.component.html</context>
-          <context context-type="linenumber">39,40</context>
+          <context context-type="linenumber">95,96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4582960895311066471" datatype="html">
@@ -71,7 +75,7 @@
         <target> Durchschnitt </target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/classmate/src/app/grades/grades.component.html</context>
-          <context context-type="linenumber">65,66</context>
+          <context context-type="linenumber">125,126</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5008745968518267369" datatype="html">
@@ -79,7 +83,7 @@
         <target>Alle ausklappen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/classmate/src/app/grades/grades.component.html</context>
-          <context context-type="linenumber">110</context>
+          <context context-type="linenumber">146</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8088663872040483564" datatype="html">
@@ -87,7 +91,7 @@
         <target>Alle einklappen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/classmate/src/app/grades/grades.component.html</context>
-          <context context-type="linenumber">111</context>
+          <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7715848895573190774" datatype="html">
@@ -95,7 +99,7 @@
         <target> Details </target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/classmate/src/app/grades/grades.component.html</context>
-          <context context-type="linenumber">114,115</context>
+          <context context-type="linenumber">180,181</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5248717555542428023" datatype="html">
@@ -130,12 +134,12 @@
           <context context-type="linenumber">46,48</context>
         </context-group>
       </trans-unit>
-            <trans-unit id="2513192771642514097" datatype="html">
+      <trans-unit id="2513192771642514097" datatype="html">
         <source>Wrong Username or Password</source>
         <target>Falsches Passwort oder Benutzername</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/classmate/src/app/login/login.component.ts</context>
-          <context context-type="linenumber">58</context>
+          <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6650633628037596693" datatype="html">
@@ -143,7 +147,7 @@
         <target>Erneut versuchen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/classmate/src/app/login/login.component.ts</context>
-          <context context-type="linenumber">58</context>
+          <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1564321369941600198" datatype="html">
@@ -151,7 +155,7 @@
         <target>Ein unerwarteter Fehler ist aufgetreten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/classmate/src/app/login/login.component.ts</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6377887390461423650" datatype="html">
@@ -159,7 +163,7 @@
         <target>Später erneut versuchen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/classmate/src/app/login/login.component.ts</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7659798892637223342" datatype="html">
@@ -183,7 +187,7 @@
         <target>Trend</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/classmate/src/app/subject/subject.component.html</context>
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5960813676715791037" datatype="html">
@@ -191,7 +195,7 @@
         <target>Notenentwicklung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/classmate/src/app/subject/subject.component.html</context>
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
     </body>
