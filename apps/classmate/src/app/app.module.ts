@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select'
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
@@ -69,6 +70,7 @@ import { SubjectComponent } from './subject/subject.component';
     MatToolbarModule,
     MatSnackBarModule,
     MatTableModule,
+    MatSelectModule,
     MatSortModule,
     MatCardModule,
     MatCheckboxModule,

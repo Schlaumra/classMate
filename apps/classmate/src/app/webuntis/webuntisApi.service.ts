@@ -7,6 +7,7 @@ import {
   DataSubject,
   dto,
   GetCurrentSchoolYearDtoResponse,
+  GetSchoolYearsDtoResponse,
   GetSubjectsDtoResponse,
   Grade,
   GradeCollectionBySubject,
@@ -43,6 +44,8 @@ import {
   providedIn: 'root',
 })
 export class WebuntisApiService {
+  _schoolYear: SchoolYear[] = []
+
   set school(v: string) {
     localStorage.setItem('school', v);
   }
@@ -57,16 +60,11 @@ export class WebuntisApiService {
     return Number(localStorage.getItem('currentStudent')) || 0;
   }
 
-  set currentYear(v: SchoolYear | null) {
-    localStorage.setItem('schoolYear', JSON.stringify(v));
+  set currentYear(v: number) {
+    localStorage.setItem('currentSchoolYear', String(v));
   }
-  get currentYear(): SchoolYear | null {
-    const i = localStorage.getItem('schoolYear');
-    if (i) {
-      return JSON.parse(i) as SchoolYear;
-    } else {
-      return null;
-    }
+  get currentYear(): number {
+    return Number(localStorage.getItem('currentSchoolYear')) || 0;
   }
 
   set students(v: Person[]) {
@@ -76,6 +74,22 @@ export class WebuntisApiService {
     const student = localStorage.getItem('student');
     if (student) {
       return JSON.parse(student);
+    }
+    throw Error('Not logged in');
+  }
+
+  set schoolYears(v: SchoolYear[]) {
+    this._schoolYear = v
+    localStorage.setItem('schoolYears', JSON.stringify(v));
+  }
+  get schoolYears(): SchoolYear[] {
+    const schoolYears = localStorage.getItem('schoolYears');
+
+    if (schoolYears) {
+      if (JSON.stringify(this._schoolYear) != schoolYears) {
+        this._schoolYear = JSON.parse(schoolYears);
+      }
+      return this._schoolYear;
     }
     throw Error('Not logged in');
   }
@@ -209,9 +223,15 @@ export class WebuntisApiService {
         switchMap(() => data$)
       );
 
-    // Get the current school year and change to token
-    const currentSchoolYear$ = this.getCurrentSchoolYear().pipe(
-      tap((currentSchoolYear) => (this.currentYear = currentSchoolYear.result)),
+    // Get the school years and change to token
+    const currentSchoolYear$ = this.getSchoolYears().pipe(
+      tap((schoolYears) => 
+      {
+        if (schoolYears.result.length > 0) {
+          this.schoolYears = schoolYears.result
+          this.currentYear = schoolYears.result.length-1
+        }
+      }),
       mergeMap(() => token$)
     );
 
@@ -310,7 +330,7 @@ export class WebuntisApiService {
     return this.getApi<{ data: { lessons: Lesson[] } }>(
       `classreg/grade/grading/list?studentId=${
         this.students[this.currentStudent].id
-      }&schoolyearId=${this.currentYear?.id}`,
+      }&schoolyearId=${this.schoolYears[this.currentYear].id}`,
       undefined,
       true
     ).pipe(mergeMap((value) => from(value.data.lessons)));
@@ -337,6 +357,19 @@ export class WebuntisApiService {
       'getCurrentSchoolYear'
     );
   }
+
+  /**
+   * Get info about all school years
+   * 
+   * @returns Observable that emmits the years
+   */
+    getSchoolYears(): Observable<GetSchoolYearsDtoResponse> {
+      return this.postJsonRpcApi<GetSchoolYearsDtoResponse>(
+        Method.GETSCHOOLYEARS,
+        undefined,
+        'getSchoolYears'
+      );
+    }
 
   /**
    * Get the grades for a subject

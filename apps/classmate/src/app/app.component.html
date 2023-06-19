@@ -36,6 +36,14 @@
               <img [src]="getCurrentUser()?.imageUrl || '../../assets/account.svg'">
             </div>
             <div>{{ getCurrentUser()?.displayName }}</div>
+            <div>
+              <mat-form-field (click)="$event.stopPropagation()">
+                <mat-label i18n>School year</mat-label>
+                <mat-select [(value)]="selected" (selectionChange)="setYear()">
+                  <mat-option *ngFor="let schoolYears of getSchoolYears(); index as i" [value]="i">{{schoolYears.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
           </div>
           <mat-divider></mat-divider>
           <div class="menu-account-selection">
@@ -49,7 +57,7 @@
           <mat-divider></mat-divider>
           <button mat-menu-item (click)="logout()" class="logout">
             <mat-icon class="material-symbols-rounded">logout</mat-icon>
-            <span>Logout</span>
+            <span i18n>Logout</span>
           </button>
         </mat-menu>
       </div>

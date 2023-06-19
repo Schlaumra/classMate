@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Person } from '@classmate/api-interfaces';
+import { Person, SchoolYear } from '@classmate/api-interfaces';
 import { LoadingService } from './loading/loading.service';
 import { WebuntisApiService } from './webuntis/webuntisApi.service';
 
@@ -16,6 +16,8 @@ export class AppComponent {
     private activatedRoute: ActivatedRoute,
     protected loading: LoadingService
   ) {}
+
+  selected = this.webUntis.currentYear;
 
   /**
    * Logout of the API and the application
@@ -114,4 +116,44 @@ export class AppComponent {
       this.getUsers()?.findIndex((element) => element.id == user.id) || 0;
     window.location.reload();
   }
+
+  /**
+   * Get school years
+   * 
+   * @returns An array of the school years belonging to the user 
+   */
+    getSchoolYears(): SchoolYear[] | null {
+      if (this.webUntis.isLoggedIn()) {
+        this.selected = this.webUntis.currentYear;
+        return this.webUntis.schoolYears
+      } else {
+        this.webUntis.logout();
+        return null;
+      }
+
+    }
+
+  /**
+   * Get current school year
+   * 
+   * @returns School year object
+   */
+    getCurrentSchoolYear(): SchoolYear | null {
+      if (this.webUntis.isLoggedIn()) {
+        return this.webUntis.schoolYears[this.webUntis.currentYear]
+      } else {
+        this.webUntis.logout();
+        return null;
+      }
+
+    }
+  /**
+   * Set the year that it is requested to show the data from
+   * 
+   */
+  setYear() {
+    this.webUntis.currentYear = this.selected
+    window.location.reload();
+  }
+    
 }

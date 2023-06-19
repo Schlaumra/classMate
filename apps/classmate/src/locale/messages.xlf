@@ -2,6 +2,20 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="5809161738381734013" datatype="html">
+        <source>School year</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/classmate/src/app/app.component.html</context>
+          <context context-type="linenumber">41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3797778920049399855" datatype="html">
+        <source>Logout</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/classmate/src/app/app.component.html</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5304185281800275770" datatype="html">
         <source>Average Mark</source>
         <context-group purpose="location">
@@ -60,14 +74,14 @@
         <source> Subject </source>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/classmate/src/app/grades/grades.component.html</context>
-          <context context-type="linenumber">95,96</context>
+          <context context-type="linenumber">94,96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4582960895311066471" datatype="html">
         <source> Average </source>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/classmate/src/app/grades/grades.component.html</context>
-          <context context-type="linenumber">125,126</context>
+          <context context-type="linenumber">124,126</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5008745968518267369" datatype="html">
@@ -88,7 +102,7 @@
         <source> Analytics </source>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/classmate/src/app/grades/grades.component.html</context>
-          <context context-type="linenumber">180,181</context>
+          <context context-type="linenumber">179,181</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5248717555542428023" datatype="html">

@@ -81,6 +81,10 @@ export interface GetCurrentSchoolYearDtoResponse extends dtoResponse {
   result: SchoolYear;
 }
 
+export interface GetSchoolYearsDtoResponse extends dtoResponse {
+  result: SchoolYear[];
+}
+
 export interface Lesson {
   id: number;
   klassen: string;
